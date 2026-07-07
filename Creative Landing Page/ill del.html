@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Landing Page</title>
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <h1 class="logo">StarStudio</h1>
+
+      <ul>
+        <li><a href="#addhomepagelink">Home</a></li>
+        <li><a href="#addaboutpagelinkhere">About</a></li>
+        <li><a href="#addcontactpagelink">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <section class="hero">
+    <div class="content">
+      <h2>Welcome to StarStudio</h2>
+      <p>
+        Where creativity meets innovation.
+        We provide the tools and resources you need to 
+        bring your ideas to life.
+      </p>
+
+      <button>Get Started</button>
+    </div>
+
+    <img src="#addanyimageurl" alt="Creative image">
+  </section>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+
+body {
+  background: #f8f8f8;
+  color: #222;
+}
+
+
+header {
+  padding: 20px 8%;
+}
+
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.logo {
+  font-size: 28px;
+}
+
+
+ul {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+}
+
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px 8%;
+  gap: 40px;
+}
+
+
+.content {
+  max-width: 500px;
+}
+
+
+h2 {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+
+p {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+
+button {
+  padding: 12px 30px;
+  border: none;
+  background: black;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+
+img {
+  max-width: 400px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+
+  nav {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  ul {
+    gap: 15px;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 35px;
+  }
+
+}
+</style>
+
+</body>
+</html> 
