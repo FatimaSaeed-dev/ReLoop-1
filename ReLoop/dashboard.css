@@ -1,0 +1,417 @@
+/* ==================================================
+   RELOOP DASHBOARD
+================================================== */
+
+/* ---------- Google Font ---------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ---------- Variables ---------- */
+
+:root{
+
+    --green:#2E7D32;
+    --dark-green:#1B5E20;
+    --light-green:#E8F5E9;
+
+    --white:#ffffff;
+    --background:#F5F7F4;
+
+    --text:#2c2c2c;
+    --light-text:#777;
+
+    --border:#dddddd;
+
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+/* ---------- Reset ---------- */
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+    background:var(--background);
+    color:var(--text);
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+/* ==================================================
+   SIDEBAR
+================================================== */
+
+.sidebar{
+
+    width:260px;
+
+    background:var(--dark-green);
+
+    color:white;
+
+    padding:35px 25px;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    height:100vh;
+
+}
+
+.logo{
+
+    text-align:center;
+
+    margin-bottom:50px;
+
+    font-size:30px;
+
+    font-weight:800;
+
+}
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+.sidebar li{
+
+    padding:16px 20px;
+
+    margin-bottom:12px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.sidebar li:hover{
+
+    background:rgba(255,255,255,.12);
+
+}
+
+.sidebar .active{
+
+    background:white;
+
+    color:var(--dark-green);
+
+    font-weight:700;
+
+}
+
+/* ==================================================
+   MAIN CONTENT
+================================================== */
+
+.main-content{
+
+    margin-left:260px;
+
+    width:calc(100% - 260px);
+
+    padding:45px;
+
+}
+
+header{
+
+    margin-bottom:40px;
+
+}
+
+header h1{
+
+    font-size:38px;
+
+    color:var(--green);
+
+}
+
+header p{
+
+    color:var(--light-text);
+
+    margin-top:8px;
+
+}
+
+/* ==================================================
+   STATS
+================================================== */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:25px;
+
+    margin-bottom:45px;
+
+}
+
+.card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:var(--shadow);
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.card h2{
+
+    font-size:34px;
+
+    color:var(--green);
+
+    margin-bottom:10px;
+
+}
+
+.card p{
+
+    color:var(--light-text);
+
+}
+
+/* ==================================================
+   RECENT LISTINGS
+================================================== */
+
+.recent{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.recent h2{
+
+    margin-bottom:25px;
+
+    color:var(--green);
+
+}
+
+/* ==================================================
+   TABLE
+================================================== */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+th{
+
+    text-align:left;
+
+    padding:18px;
+
+    background:var(--light-green);
+
+    color:var(--green);
+
+}
+
+td{
+
+    padding:18px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+tr:hover{
+
+    background:#fafafa;
+
+}
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media(max-width:900px){
+
+    body{
+
+        flex-direction:column;
+
+    }
+
+    .sidebar{
+
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+
+    }
+
+    .main-content{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding:25px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .stats{
+
+        grid-template-columns:1fr;
+
+    }
+
+    table{
+
+        font-size:14px;
+
+    }
+
+    th,
+    td{
+
+        padding:12px;
+
+    }
+
+}
+
+/* ======================================
+   ANALYTICS
+====================================== */
+
+.analytics{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:30px;
+
+    margin-bottom:40px;
+
+}
+
+.chart-card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.chart-card h2{
+
+    margin-bottom:20px;
+
+    color:var(--green);
+
+}
+
+/* ======================================
+   ACTIVITY
+====================================== */
+
+.activity{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.activity h2{
+
+    margin-bottom:20px;
+
+    color:var(--green);
+
+}
+
+.activity ul{
+
+    list-style:none;
+
+}
+
+.activity li{
+
+    padding:15px 0;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.activity li:last-child{
+
+    border:none;
+
+}
+
+@media(max-width:900px){
+
+    .analytics{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

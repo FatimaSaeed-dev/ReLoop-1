@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | ReLoop</title>
+
+    <link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav>
+
+    <div class="logo">
+        <a href="index.html">ReLoop</a>
+    </div>
+
+    <ul class="nav-links">
+
+        <li><a href="index.html">Home</a></li>
+
+        <li><a href="marketplace.html">Marketplace</a></li>
+
+        <li><a href="login.html">Login</a></li>
+
+    </ul>
+
+</nav>
+
+<!-- ================= SIGN UP ================= -->
+
+<section class="auth-container">
+
+    <div class="auth-card">
+
+        <h1>Create Your Account</h1>
+
+        <p class="subtitle">
+            Join ReLoop and start giving reusable materials a second life.
+        </p>
+
+        <form id="signupForm">
+
+            <!-- Full Name -->
+
+            <div class="input-group">
+
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    id="fullname"
+                    placeholder="Enter your full name"
+                    required>
+
+            </div>
+
+            <!-- Email -->
+
+            <div class="input-group">
+
+                <label>Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required>
+
+            </div>
+
+            <!-- Company -->
+
+            <div class="input-group">
+
+                <label>Company Name (Optional)</label>
+
+                <input
+                    type="text"
+                    id="company"
+                    placeholder="Your company name">
+
+            </div>
+
+            <!-- Role -->
+
+            <div class="input-group">
+
+                <label>Account Type</label>
+
+                <select id="role">
+
+                    <option>Business</option>
+
+                    <option>Recycler</option>
+
+                </select>
+
+            </div>
+
+            <!-- Password -->
+
+            <div class="input-group">
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create a password"
+                    required>
+
+            </div>
+
+            <!-- Confirm Password -->
+
+            <div class="input-group">
+
+                <label>Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm password"
+                    required>
+
+            </div>
+
+            <!-- Terms -->
+
+            <div class="terms">
+
+                <label>
+
+                    <input type="checkbox" required>
+
+                    I agree to the Terms & Conditions
+
+                </label>
+
+            </div>
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="auth-btn">
+
+                Create Account
+
+            </button>
+
+        </form>
+
+        <div class="divider">
+
+            <span>OR</span>
+
+        </div>
+
+        <button class="google-btn">
+
+            Continue with Google
+
+        </button>
+
+        <p class="bottom-text">
+
+            Already have an account?
+
+            <a href="login.html">
+
+                Login
+
+            </a>
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+
+        © 2026 ReLoop | Sustainable Resource Sharing
+
+    </p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
