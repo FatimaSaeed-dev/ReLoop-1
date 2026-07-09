@@ -1,224 +1,330 @@
-<script>
+document.addEventListener("DOMContentLoaded", () => {
+
 let stats = JSON.parse(localStorage.getItem("reloop_stats")) || {
-  biz: 30,
-  kg: 9830,
-  items: 6850
+    biz: 30,
+    kg: 9830,
+    items: 6850
 };
 
+
+// ===============================
+// STATS
+// ===============================
+
 function renderStats(){
-  document.getElementById("biz").innerText = stats.biz;
-  document.getElementById("kg").innerText = stats.kg;
-  document.getElementById("items").innerText = stats.items;
+
+    document.getElementById("biz").innerText = stats.biz;
+    document.getElementById("kg").innerText = stats.kg;
+    document.getElementById("items").innerText = stats.items;
+
 }
 
-function businessJoins(){
-  stats.biz += 1;
-
-  save();
-  renderStats();
-}
-
-function materialReLooped(kgAmount){
-  stats.kg += kgAmount;
-  stats.items += 1;
-
-  save();
-  renderStats();
-}
 
 function save(){
-  localStorage.setItem("reloop_stats", JSON.stringify(stats));
+
+    localStorage.setItem(
+        "reloop_stats",
+        JSON.stringify(stats)
+
+    );
 }
+
+
+
+function businessJoins(){
+
+    stats.biz++;
+
+    save();
+    renderStats();
+
+}
+
+
+function materialReLooped(kgAmount){
+
+    stats.kg += kgAmount;
+    stats.items++;
+
+    save();
+    renderStats();
+
+}
+
 
 renderStats();
 
-setTimeout(() => businessJoins(), 3000);
-setTimeout(() => materialReLooped(120), 5000);
-setTimeout(() => materialReLooped(45), 8000);
+
+// Remove these if you don't want fake automatic updates
+/*
+setTimeout(() => businessJoins(),3000);
+setTimeout(() => materialReLooped(120),5000);
+setTimeout(() => materialReLooped(45),8000);
+*/
 
 
-const requestButtons = document.querySelectorAll(".request-btn");
 
-const popup = document.getElementById("loginPopup");
-
-const closeButton = document.querySelector(".close-btn");
-
-const searchInput = document.getElementById("searchInput");
-
-const cards = document.querySelectorAll(".product-card");
-
-const selects = document.querySelectorAll(".filter-group select");
-
-
-// =====================================
+// ===============================
 // LOGIN POPUP
-// =====================================
+// ===============================
+
+
+const requestButtons =
+document.querySelectorAll(".request-btn");
+
+
+const popup =
+document.getElementById("loginPopup");
+
+
+const closeButton =
+document.querySelector(".close-btn");
+
+
+
+if(popup && closeButton){
+
 
 requestButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click",()=>{
 
-        popup.style.display = "flex";
+        popup.style.display="flex";
 
     });
 
 });
 
-closeButton.addEventListener("click", () => {
 
-    popup.style.display = "none";
+closeButton.addEventListener("click",()=>{
+
+    popup.style.display="none";
 
 });
 
-popup.addEventListener("click", (event) => {
+
+popup.addEventListener("click",(event)=>{
 
     if(event.target === popup){
 
-        popup.style.display = "none";
+        popup.style.display="none";
 
     }
 
 });
 
 
-// =====================================
-// SEARCH
-// =====================================
-
-searchInput.addEventListener("keyup", filterProducts);
+}
 
 
-// =====================================
-// FILTERS
-// =====================================
 
-selects.forEach(select => {
-
-    select.addEventListener("change", filterProducts);
-
-});
+// ===============================
+// SEARCH + FILTER
+// ===============================
 
 
-// =====================================
-// MAIN FILTER FUNCTION
-// =====================================
+const searchInput =
+document.getElementById("searchInput");
+
+
+const cards =
+document.querySelectorAll(".product-card");
+
+
+const selects =
+document.querySelectorAll(".filter-group select");
+
+
 
 function filterProducts(){
 
-    const search = searchInput.value.toLowerCase();
 
-    const category = selects[0].value;
-
-    const location = selects[1].value;
-
-    let visibleProducts = 0;
-
-    cards.forEach(card => {
-
-        const title =
-            card.querySelector("h3").textContent.toLowerCase();
-
-        const business =
-            card.querySelector(".business").textContent.toLowerCase();
-
-        const text =
-            card.textContent.toLowerCase();
-
-        // Search
-
-        const matchesSearch =
-
-            title.includes(search) ||
-
-            business.includes(search) ||
-
-            text.includes(search);
+if(!searchInput) return;
 
 
-        // Category
-
-        let matchesCategory = true;
-
-        if(category !== "All Categories"){
-
-            matchesCategory =
-
-                title.includes(category.toLowerCase());
-
-        }
+const search =
+searchInput.value.toLowerCase();
 
 
-        // Location
 
-        let matchesLocation = true;
-
-        if(location !== "All Cities"){
-
-            matchesLocation =
-
-                text.includes(location.toLowerCase());
-
-        }
+const category =
+selects[0]?.value || "All Categories";
 
 
-        if(matchesSearch && matchesCategory && matchesLocation){
+const location =
+selects[1]?.value || "All Cities";
 
-            card.style.display = "block";
 
-            visibleProducts++;
+let visibleProducts = 0;
 
-        }
 
-        else{
 
-            card.style.display = "none";
+cards.forEach(card=>{
 
-        }
 
-    });
+const title =
+card.querySelector("h3")?.textContent.toLowerCase() || "";
 
-    showEmptyMessage(visibleProducts);
+
+const text =
+card.textContent.toLowerCase();
+
+
+
+const matchesSearch =
+text.includes(search);
+
+
+
+const matchesCategory =
+category==="All Categories" ||
+text.includes(category.toLowerCase());
+
+
+
+const matchesLocation =
+location==="All Cities" ||
+text.includes(location.toLowerCase());
+
+
+
+if(
+matchesSearch &&
+matchesCategory &&
+matchesLocation
+){
+
+card.style.display="block";
+
+visibleProducts++;
+
+}
+
+else{
+
+card.style.display="none";
 
 }
 
 
-// =====================================
-// EMPTY RESULTS
-// =====================================
+
+});
+
+
+showEmptyMessage(visibleProducts);
+
+
+}
+
+
+
+
+if(searchInput){
+
+searchInput.addEventListener(
+"input",
+filterProducts
+);
+
+}
+
+
+
+selects.forEach(select=>{
+
+select.addEventListener(
+"change",
+filterProducts
+);
+
+});
+
+
+
+
+// ===============================
+// EMPTY MESSAGE
+// ===============================
+
 
 function showEmptyMessage(number){
 
-    let message = document.getElementById("emptyMessage");
 
-    if(!message){
+let message =
+document.getElementById("emptyMessage");
 
-        message = document.createElement("h2");
 
-        message.id = "emptyMessage";
 
-        message.style.textAlign = "center";
+if(!message){
 
-        message.style.marginTop = "50px";
+message =
+document.createElement("h2");
 
-        message.style.color = "#666";
+message.id="emptyMessage";
 
-        document.querySelector(".products").after(message);
+message.style.textAlign="center";
 
+message.style.marginTop="50px";
+
+message.style.color="#666";
+
+
+document.querySelector(".products")
+.after(message);
+
+}
+
+
+
+if(number===0){
+
+message.textContent=
+"No materials match your search.";
+
+}
+
+else{
+
+message.textContent="";
+
+}
+
+
+
+}
+
+
+});
+
+window.openDashboard = function(){
+
+    let loggedIn = localStorage.getItem("reloop_loggedIn");
+
+    if(loggedIn === "true"){
+        window.location.href = "dashboard.html";
+    } 
+    else {
+        alert("Please login first to access dashboard.");
+        window.location.href = "login.html";
     }
 
-    if(number === 0){
+};
 
-        message.textContent =
 
-        "No materials match your search.";
+function login(){
 
-    }
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
 
-    else{
+    if(email && password){
 
-        message.textContent = "";
+        localStorage.setItem("reloop_loggedIn", "true");
 
+        window.location.href = "dashboard.html";
+
+    } 
+    else {
+        alert("Enter email and password");
     }
 
 }
-</script>

@@ -16,10 +16,17 @@
 <body>
 
 <!-- Sidebar -->
+ <script>
+
+if(localStorage.getItem("reloop_loggedIn") !== "true"){
+    window.location.href = "login.html";
+}
+
+</script>
 
 <aside class="sidebar">
 
-    <h2 class="logo">ReLoop</h2>
+    <h2 class="logo">♻ ReLoop</h2>
 
     <ul>
 

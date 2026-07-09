@@ -1,380 +1,63 @@
-<style>
-
-:root{
-  --green:#16a34a;
-  --soft-green:#dcfce7;
-  --bg:#f7fdf9;
-  --text:#0f172a;
-  --muted:#475569;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-}
-
-body {
-    background-color: #ffe1aa;
-    position: relative;
-    color: var(--text);
-    overflow-x: hidden;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("image bg.jpg");
-    background-size: cover;
-    background-position: center;
-    opacity: 0.2;
-    pointer-events: none;
-    z-index: 999;
-}
-body > * {
-    position: relative;
-    z-index: 1000;
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 60px;
-
-    background: rgba(255, 248, 235, 0.85);
-    backdrop-filter: blur(8px);
-
-    border-bottom: 1px solid rgba(80, 50, 20, 0.15);
-
-    box-shadow: 0 5px 20px rgba(80, 50, 20, 0.08);
-
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    isolation: isolate;
-}
-
-nav::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-
-    width: 100%;
-    height: 14px;
-
-    background: #b8864a;
-    background-image: url("cardboard strip.png");
-    background-size: cover;
-
-    box-shadow: 0 4px 10px rgba(80,50,20,0.2);
-
-    z-index: 10;
-}
-
-.logo {
-    font-size: 26px;
-    font-weight: 800;
-    color: #166104;
-    letter-spacing: 1px;
-
-    font-family: Georgia, serif;
-}
-
-nav ul {
-    display: flex;
-    gap: 30px;
-    list-style: none;
-}
-
-nav a {
-    text-decoration: none;
-    color: #5c4a35;
-
-    font-size: 15px;
-    font-weight: 600;
-
-    padding: 8px 14px;
-    border-radius: 20px;
-
-    transition: 0.3s ease;
-}
-
-nav a:hover {
-    color: #166104;
-    background: #f3e4c7;
-    transform: translateY(-2px);
-}
-
-.hero{
-  text-align:center;
-  padding:80px 20px 40px;
-  position:relative;
-  z-index: 2;
-}
-
-.badge{
-  display:inline-block;
-  padding:8px 14px;
-  background:var(--soft-green);
-  border-radius:999px;
-  font-size:17px;
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  color: hwb(36 2% 66%);
-  font-weight:600;
-}
-
-.hero h1{
-  font-size:52px;
-  line-height:1.1;
-}
-
-.hero h1 span{
-  color:var(--green);
-}
-
-.hero p{
-  margin-top:23px;
-  color:#21252b;
-  max-width:700px;
-  margin-left:auto;
-  margin-right:auto;
-  font-size:18px;
-}
-
-.hero-text {
-  animation: fadeGlow 1.5s ease-in-out;
-}
-
-@keyframes fadeGlow {
-  from {
-    opacity: 0;
-    filter: blur(5px);
-    text-shadow: 0 0 0 transparent;
-  }
-
-  to {
-    opacity: 1;
-    filter: blur(0);
-    text-shadow: 
-      0 0 10px white,
-      0 0 20px rgb(172, 255, 124);
-  }
-}
-
-.cta {
-  display: inline-block;
-  background-color: #166104;
-    color: white;
-    border: none;
-    padding: 14px 30px;
-    margin-top: 30px;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s ease;
-    text-decoration: none;
-}
-
-.cta:hover {
-    background-color: #0f4503;
-    transform: translateY(-3px);
-}
-
-.tree{
-  position:absolute;
-  width:120px;
-  opacity:0.4;
-}
-
-.tree.left{
-  margin-left:200px;
-  margin-top:670px;
-  
-}
-
-.tree.right{
-  margin-left:1560px;
-  margin-top:670px;
-}
-
-.recycle{
- width: 600px;
- height: auto;
-  position: absolute;
-  margin-left: 650px;
-  margin-top: 40px;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  opacity: 0.5;
-}
-
-
-.container {
-  position: relative;
-}
-
-.stats{
-  display:flex;
-  justify-content:center;
-  gap:30px;
-  margin-top:50px;
-  flex-wrap:wrap;
-}
-
-.card{
-  background:white;
-  border:2px dashed rgba(22,163,74,0.2);
-  padding:20px 30px;
-  border-radius:18px;
-  min-width:180px;
-  text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,0.05);
-}
-
-.card h2{
-  color:var(--green);
-  font-size:30px;
-}
-
-.section{
-  padding:80px 60px;
-  text-align:center;
-}
-
-.section h2{
-  font-size:36px;
-  margin-bottom:10px;
-}
-
-.section p{
-  color:var(--muted);
-  max-width:700px;
-  margin:auto;
-}
-
-.features{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-  margin-top:40px;
-}
-
-.feature{
-  background:white;
-  padding:20px;
-  border-radius:18px;
-  border:1px solid #e2e8f0;
-  position:relative;
-}
-
-.feature::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:18px;
-  border:2px dashed rgba(22,163,74,0.2);
-  pointer-events:none;
-}
-
-
-footer {
-  display: flex;
-  justify-content: center;
-  padding: 30px;
-  color: #166104;
-}
-
-.float{
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
-}
-
-/* ===================================================
-   RELOOP MARKETPLACE CSS
-   Part 2A - Foundation
-=================================================== */
-
-/* ---------- Google Font ---------- */
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-/* ---------- Variables ---------- */
 
 :root{
-
     --green:#2E7D32;
     --dark-green:#1B5E20;
     --light-green:#E8F5E9;
-
-    --white:#ffffff;
-    --off-white:#fafaf7;
-
-    --text:#2b2b2b;
-    --light-text:#666;
-
-    --border:#d8d8d8;
-
-    --shadow:0 8px 25px rgba(0,0,0,.08);
-
+    --cream:#faf7ef;
+    --text:#1f2937;
+    --muted:#64748b;
 }
 
-/* ---------- Reset ---------- */
+
+/* RESET */
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-/* ---------- Body ---------- */
 
 body{
 
-    font-family:'Poppins',sans-serif;
-
-    background:var(--off-white);
+    background:#ffe1aa;
 
     color:var(--text);
 
-    line-height:1.6;
+    overflow-x:hidden;
 
 }
 
-/* ---------- Links ---------- */
 
-a{
+/* PAPER TEXTURE */
 
-    text-decoration:none;
+body::before{
 
-    color:inherit;
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background-image:url("image bg.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    opacity:.18;
+
+    z-index:-1;
 
 }
 
-img{
 
-    width:100%;
-
-    display:block;
-
-}
-
-/* ===================================================
-   NAVIGATION
-=================================================== */
+/* NAVBAR */
 
 nav{
-
-    width:100%;
 
     display:flex;
 
@@ -384,7 +67,11 @@ nav{
 
     padding:20px 8%;
 
-    background:white;
+
+    background:rgba(255,255,255,.75);
+
+    backdrop-filter:blur(15px);
+
 
     position:sticky;
 
@@ -392,11 +79,37 @@ nav{
 
     z-index:1000;
 
-    box-shadow:0 2px 15px rgba(0,0,0,.05);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 
 }
 
-/* Logo */
+
+/* cardboard strip */
+
+nav::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:-10px;
+
+    left:0;
+
+    width:100%;
+
+    height:12px;
+
+
+    background:url("cardboard strip.png");
+
+    background-size:cover;
+
+}
+
+
+/* LOGO */
 
 .logo{
 
@@ -404,480 +117,320 @@ nav{
 
     font-weight:800;
 
-    color:var(--green);
+    color:#166104;
+
+    letter-spacing:1px;
 
 }
 
-/* Navigation Links */
 
-.nav-links{
+/* NAV LINKS */
 
-    display:flex;
 
-    list-style:none;
+nav a{
 
-    gap:35px;
+    text-decoration:none;
 
-}
+    color:#3f4f3d;
 
-.nav-links a{
+    margin-left:25px;
 
-    font-size:16px;
+    font-size:15px;
 
-    font-weight:500;
+    font-weight:600;
 
     transition:.3s;
 
 }
 
-.nav-links a:hover{
+
+nav a:hover{
 
     color:var(--green);
 
 }
 
-.active{
 
-    color:var(--green);
+/* HERO */
 
-    font-weight:700;
 
-}
-
-/* ===================================================
-   HERO
-=================================================== */
-
-.marketplace-header{
+.hero{
 
     text-align:center;
 
-    padding:70px 8% 40px;
+    padding:170px 150px 120px;
+}
+
+
+/* recycle image behind */
+
+
+.recycle{
+
+    width:550px;
+
+    opacity:.25;
+
+    position:absolute;
+
+    top:135px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:-1;
 
 }
 
-.marketplace-header h1{
 
-    font-size:52px;
 
-    margin-bottom:18px;
+
+.hero h1{
+
+    font-size:48px;
+
+    line-height:1.15;
+
+    font-weight:800;
+
+}
+
+
+
+.hero h1 span{
 
     color:var(--green);
 
 }
 
-.marketplace-header p{
 
-    max-width:650px;
 
-    margin:auto;
+.hero p{
 
-    color:var(--light-text);
+    max-width:700px;
 
-    font-size:17px;
+    margin:25px auto;
+
+    font-size:18px;
+
+    color:#374151;
 
 }
 
-/* ===================================================
-   SEARCH BAR
-=================================================== */
 
-.search-container{
+/* badge */
 
-    margin-top:40px;
+.badge{
+
+    display:inline-block;
+
+    padding:8px 20px;
+
+    border-radius:30px;
+
+    background:var(--light-green);
+
+    color:var(--dark-green);
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
+}
+
+
+/* BUTTON */
+
+
+.cta{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    padding:15px 35px;
+
+    background:var(--dark-green);
+
+    color:white;
+
+    border-radius:40px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+.cta:hover{
+
+    transform:translateY(-5px);
+
+    background:#0f4503;
+
+}
+
+
+/* TREES */
+
+
+.tree{
+
+    position:absolute;
+
+    width:120px;
+
+    opacity:.35;
+
+}
+
+
+.tree.left{
+
+    left: 450px;;
+
+    top:735px;
+
+}
+
+
+.tree.right{
+
+    right:450px;
+
+    top:735px;
+
+}
+
+
+/* STATS */
+
+
+.stats{
 
     display:flex;
 
     justify-content:center;
-
-}
-
-#searchInput{
-
-    width:650px;
-
-    max-width:100%;
-
-    padding:18px 25px;
-
-    border-radius:50px;
-
-    border:2px solid var(--border);
-
-    outline:none;
-
-    font-size:16px;
-
-    transition:.3s;
-
-    background:white;
-
-}
-
-#searchInput:focus{
-
-    border-color:var(--green);
-
-    box-shadow:0 0 15px rgba(46,125,50,.15);
-
-}
-
-/* ===================================================
-   MAIN LAYOUT
-=================================================== */
-
-.marketplace-layout{
-
-    display:grid;
-
-    grid-template-columns:280px 1fr;
-
-    gap:40px;
-
-    width:90%;
-
-    max-width:1500px;
-
-    margin:50px auto;
-
-    align-items:start;
-
-}
-
-/* ===================================================
-   FILTER SIDEBAR
-=================================================== */
-
-.filters{
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:25px;
-
-    box-shadow:var(--shadow);
-
-    position:sticky;
-
-    top:100px;
-
-}
-
-.filters h2{
-
-    color:var(--green);
-
-    margin-bottom:25px;
-
-    font-size:24px;
-
-}
-
-.filter-group{
-
-    margin-bottom:25px;
-
-}
-
-.filter-group label{
-
-    display:block;
-
-    font-weight:600;
-
-    margin-bottom:10px;
-
-}
-
-.filter-group select{
-
-    width:100%;
-
-    padding:14px;
-
-    border:2px solid var(--border);
-
-    border-radius:12px;
-
-    background:white;
-
-    font-size:15px;
-
-    cursor:pointer;
-
-    outline:none;
-
-    transition:.3s;
-
-}
-
-.filter-group select:focus{
-
-    border-color:var(--green);
-
-}
-
-/* ===================================================
-   PRODUCT GRID
-=================================================== */
-
-.products{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 
     gap:30px;
 
-}
+    margin-top:60px;
 
-/* ===================================================
-   PRODUCT CARD
-=================================================== */
-
-.product-card{
-
-    background:white;
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    box-shadow:var(--shadow);
-
-    transition:.35s ease;
+    flex-wrap:wrap;
 
 }
 
-.product-card:hover{
+
+.card{
+
+
+    background:rgba(255,255,255,.85);
+
+    backdrop-filter:blur(10px);
+
+
+    border-radius:25px;
+
+    padding:30px;
+
+    min-width:220px;
+
+
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+
+    border:1px solid rgba(46,125,50,.15);
+
+
+    transition:.3s;
+
+}
+
+
+.card:hover{
 
     transform:translateY(-8px);
 
-    box-shadow:0 18px 35px rgba(0,0,0,.15);
-
 }
 
-/* Product Image */
 
-.product-card img{
-
-    height:210px;
-
-    object-fit:cover;
-
-}
-
-/* Card Content */
-
-.product-card h3{
-
-    font-size:22px;
-
-    margin:18px 20px 8px;
+.card h2{
 
     color:var(--green);
 
-}
-
-.business{
-
-    font-weight:600;
-
-    color:#444;
-
-    margin:0 20px 12px;
+    font-size:35px;
 
 }
 
-.product-card p{
 
-    margin:6px 20px;
 
-    color:var(--light-text);
+/* FEATURES */
 
-    font-size:15px;
 
-}
+.section{
 
-/* ===================================================
-   REQUEST BUTTON
-=================================================== */
-
-.request-btn{
-
-    width:calc(100% - 40px);
-
-    margin:22px 20px 20px;
-
-    padding:14px;
-
-    border:none;
-
-    border-radius:30px;
-
-    background:var(--green);
-
-    color:white;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.request-btn:hover{
-
-    background:var(--dark-green);
-
-    transform:scale(1.03);
-
-}
-
-.request-btn:active{
-
-    transform:scale(.98);
-
-}
-
-/* ===================================================
-   LOGIN POPUP
-=================================================== */
-
-.popup{
-
-    position:fixed;
-
-    inset:0;
-
-    background:rgba(0,0,0,.55);
-
-    display:none;
-
-    justify-content:center;
-
-    align-items:center;
-
-    z-index:2000;
-
-}
-
-.popup-content{
-
-    width:90%;
-
-    max-width:420px;
-
-    background:white;
-
-    padding:35px;
-
-    border-radius:24px;
+    padding:1px 9%;
 
     text-align:center;
 
-    box-shadow:0 20px 45px rgba(0,0,0,.25);
+}
 
-    animation:popup .3s ease;
+
+.section h2{
+
+    font-size:40px;
+   
 
 }
 
-@keyframes popup{
 
-    from{
+.section p{
 
-        opacity:0;
-
-        transform:translateY(20px) scale(.95);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0) scale(1);
-
-    }
+    color:var(--muted);
 
 }
 
-.popup-content h2{
 
-    color:var(--green);
 
-    margin-bottom:15px;
+.features{
 
-}
+    margin-top:45px;
 
-.popup-content p{
+    display:grid;
 
-    color:var(--light-text);
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 
-    margin-bottom:25px;
-
-    line-height:1.6;
+    gap:25px;
 
 }
 
-.login-btn,
-.close-btn{
 
-    width:100%;
+.feature{
 
-    padding:14px;
 
-    border:none;
+    background:white;
 
-    border-radius:30px;
+    padding:30px;
 
-    font-size:16px;
+    border-radius:25px;
+
+
+    box-shadow:0 10px 30px rgba(0,0,0,.07);
+
+
+    border:1px solid #e8f5e9;
+
 
     font-weight:600;
 
-    cursor:pointer;
-
-    transition:.3s;
-
-    margin-bottom:12px;
-
 }
 
-.login-btn{
 
-    background:var(--green);
+/* FOOTER */
 
-    color:white;
-
-}
-
-.login-btn:hover{
-
-    background:var(--dark-green);
-
-}
-
-.close-btn{
-
-    background:#ececec;
-
-    color:#333;
-
-}
-
-.close-btn:hover{
-
-    background:#dddddd;
-
-}
-
-/* ===================================================
-   FOOTER
-=================================================== */
 
 footer{
 
@@ -889,166 +442,6 @@ footer{
 
     text-align:center;
 
-    padding:30px 8%;
+    padding:30px;
 
 }
-
-footer p{
-
-    font-size:15px;
-
-    opacity:.9;
-
-}
-
-/* ===================================================
-   SCROLLBAR
-=================================================== */
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:#f2f2f2;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:var(--green);
-
-    border-radius:20px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:var(--dark-green);
-
-}
-
-/* ===================================================
-   TABLETS
-=================================================== */
-
-@media (max-width:992px){
-
-    .marketplace-layout{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .filters{
-
-        position:static;
-
-        width:100%;
-
-    }
-
-    .products{
-
-        grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-
-    }
-
-}
-
-/* ===================================================
-   MOBILE
-=================================================== */
-
-@media (max-width:768px){
-
-    nav{
-
-        flex-direction:column;
-
-        gap:20px;
-
-        padding:20px;
-
-    }
-
-    .nav-links{
-
-        flex-wrap:wrap;
-
-        justify-content:center;
-
-        gap:20px;
-
-    }
-
-    .marketplace-header{
-
-        padding:50px 25px 30px;
-
-    }
-
-    .marketplace-header h1{
-
-        font-size:38px;
-
-    }
-
-    #searchInput{
-
-        width:100%;
-
-    }
-
-    .products{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .popup-content{
-
-        padding:25px;
-
-    }
-
-}
-
-/* ===================================================
-   SMALL PHONES
-=================================================== */
-
-@media (max-width:480px){
-
-    .logo{
-
-        font-size:24px;
-
-    }
-
-    .marketplace-header h1{
-
-        font-size:32px;
-
-    }
-
-    .product-card h3{
-
-        font-size:20px;
-
-    }
-
-    .request-btn{
-
-        font-size:14px;
-
-    }
-
-}
-
-
-
-</style>
