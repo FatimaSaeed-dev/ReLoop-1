@@ -43,4 +43,25 @@ router.get("/", async (req, res) => {
     }
 
 });
+
+router.get("/owner/:ownerId", async (req, res) => {
+
+    try {
+
+        const materials = await Material.find({
+            owner: req.params.ownerId
+        });
+
+        res.json(materials);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+});
+
 module.exports = router;
