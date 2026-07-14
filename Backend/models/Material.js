@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const MaterialSchema = new mongoose.Schema({
 
     name: {
@@ -30,9 +31,11 @@ const MaterialSchema = new mongoose.Schema({
         type: String
     },
 
-    image: {
-        type: String
-    },
+    images: [
+        {
+            type: String
+        }
+    ],
 
     owner: {
         type: mongoose.Schema.Types.ObjectId,
@@ -41,5 +44,6 @@ const MaterialSchema = new mongoose.Schema({
     }
 
 });
+
 
 module.exports = mongoose.model("Material", MaterialSchema);

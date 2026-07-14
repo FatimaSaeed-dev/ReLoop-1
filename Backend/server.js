@@ -26,6 +26,9 @@ app.use("/api/materials", materialRoutes);
 app.get("/", (req, res) => {
     res.send("ReLoop Backend is Running!");
 });
+app.get("/api/test", (req,res)=>{
+    res.send("API is working");
+});
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
