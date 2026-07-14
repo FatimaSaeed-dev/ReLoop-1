@@ -187,31 +187,36 @@ router.get("/test", (req,res)=>{
     res.send("Material route works");
 });
 
-router.get("/:id", async(req,res)=>{
 
+router.get("/:id", async (req, res) => {
 
-    try{
-
+    try {
 
         const material = await Material.findById(req.params.id)
-        .populate("owner","username");
+            .populate("owner", "username");
 
+
+        if (!material) {
+
+            return res.status(404).json({
+                message: "Material not found"
+            });
+
+        }
 
 
         res.json(material);
 
 
-    }
-    catch(error){
+    } catch(error) {
 
+        console.log(error);
 
         res.status(500).json({
-            message:error.message
+            message: error.message
         });
 
-
     }
-
 
 });
 

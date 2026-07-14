@@ -9,7 +9,7 @@
 
 <title>Product Details | ReLoop</title>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="product.css">
 
 </head>
 
@@ -43,9 +43,20 @@ ReLoop
 
 <main class="product-page">
 
-<div class="product-image">
+<div class="product-gallery">
 
-<img src="images/wood.jpg" alt="Wood Scrap">
+
+    <img 
+    id="mainImage"
+    class="main-image"
+    src="images/default.jpg"
+    alt="Product Image">
+
+
+    <div id="thumbnailContainer" class="thumbnails">
+
+    </div>
+
 
 </div>
 
@@ -83,9 +94,11 @@ Suitable for furniture makers, artists, DIY projects, schools and recycling busi
 
 </p>
 
-<button class="request-btn">
+<button 
+id="requestMaterialBtn"
+class="request-btn">
 
-Request Material
+    Request Material
 
 </button>
 
@@ -186,6 +199,69 @@ Login
 Maybe Later
 
 </button>
+
+</div>
+
+</div>
+
+<div class="popup" id="requestPopup">
+
+
+<div class="popup-content">
+
+
+<h2>
+Request Material
+</h2>
+
+
+<label>
+Quantity Needed (kg)
+</label>
+
+<input 
+id="requestQuantity"
+type="number"
+placeholder="Example: 50">
+
+
+<label>
+Delivery Location
+</label>
+
+<input
+id="requestLocation"
+type="text"
+placeholder="Karachi">
+
+
+<label>
+Message
+</label>
+
+<textarea
+id="requestMessage"
+placeholder="Tell the business what you need">
+</textarea>
+
+
+<button 
+id="sendRequestBtn"
+class="request-btn">
+
+Send Request
+
+</button>
+
+
+<button 
+id="closeRequestBtn"
+class="close-btn">
+
+Cancel
+
+</button>
+
 
 </div>
 

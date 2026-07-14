@@ -4,10 +4,13 @@ console.log("ENV =", process.env.MONGO_URI);
 
 const authRoutes = require("./routes/auth");
 const materialRoutes = require("./routes/material");
+const requestRoutes = require("./routes/request");
 
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
+const notificationRoutes =
+require("./routes/notification");
 
 const app = express();
 
@@ -22,6 +25,11 @@ const PORT = 5000;
 
 app.use("/api/auth", authRoutes);
 app.use("/api/materials", materialRoutes);
+app.use("/api/requests", requestRoutes);
+app.use(
+"/api/notifications",
+notificationRoutes
+);
 
 app.get("/", (req, res) => {
     res.send("ReLoop Backend is Running!");

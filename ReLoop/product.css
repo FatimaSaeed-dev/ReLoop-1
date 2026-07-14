@@ -1,0 +1,42 @@
+.product-gallery{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+
+.main-image{
+
+    width:500px;
+    height:500px;
+    object-fit:cover;
+    border-radius:15px;
+
+}
+
+
+.main-image:hover{
+
+    transform:scale(1.05);
+    transition:0.3s;
+
+}
+
+
+.thumbnails{
+
+    display:flex;
+    gap:10px;
+
+}
+
+
+.thumbnail{
+
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    cursor:pointer;
+    border-radius:10px;
+
+}
