@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace | ReLoop</title>
+
+    <link rel="stylesheet" href="marketplace.css">
+</head>
+
+<body>
+
+<!-- ================= NAVIGATION ================= -->
+
+<nav>
+
+    <div class="logo">
+        ♻ ReLoop
+    </div>
+
+    <ul class="nav-links">
+
+        <li><a href="index.html">Home</a></li>
+
+        <li><a class="active" href="marketplace.html">Marketplace</a></li>
+
+<li><a href="#" onclick="openDashboard()">Dashboard</a></li>
+
+        <li><a href="login.html">Login</a></li>
+
+    </ul>
+
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<header class="marketplace-header">
+
+    <h1>Marketplace</h1>
+
+    <p>
+        Browse reusable materials shared by businesses.
+        View listings freely and sign in when you're ready to request materials.
+    </p>
+
+    <div class="search-container">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search materials...">
+
+    </div>
+
+</header>
+
+<!-- ================= MAIN ================= -->
+
+<main class="marketplace-layout">
+
+    <!-- FILTERS -->
+
+    <aside class="filters">
+
+        <h2>Filters</h2>
+
+        <div class="filter-group">
+
+            <label>Category</label>
+
+            <select>
+
+                <option>All Categories</option>
+
+                <option>Wood</option>
+
+                <option>Plastic</option>
+
+                <option>Metal</option>
+
+                <option>Glass</option>
+
+                <option>Fabric</option>
+
+                <option>Paper</option>
+
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Location</label>
+
+            <select>
+
+                <option>All Cities</option>
+
+                <option>Karachi</option>
+
+                <option>Lahore</option>
+
+                <option>Islamabad</option>
+
+                <option>Faisalabad</option>
+
+                <option>Multan</option>
+
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Availability</label>
+
+            <select>
+
+                <option>Any Quantity</option>
+
+                <option>Below 50 kg</option>
+
+                <option>50–100 kg</option>
+
+                <option>100+ kg</option>
+
+            </select>
+
+        </div>
+
+    </aside>
+
+    <!-- PRODUCTS -->
+
+    <section class="products">
+
+        <!-- Product 1 -->
+
+        <article class="product-card">
+
+            <img src="images/wood.jpg" alt="Wood Scrap">
+
+            <h3>Wood Scrap</h3>
+
+            <p class="business">Eco Furniture Ltd.</p>
+
+            <p>📍 Karachi</p>
+
+            <p>50 kg Available</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+        <!-- Product 2 -->
+
+        <article class="product-card">
+
+            <img src="images/fabric.jpg" alt="Fabric Rolls">
+
+            <h3>Fabric Rolls</h3>
+
+            <p class="business">StyleTex Industries</p>
+
+            <p>📍 Lahore</p>
+
+            <p>120 metres Available</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+        <!-- Product 3 -->
+
+        <article class="product-card">
+
+            <img src="images/plastic.jpg" alt="Plastic Bottles">
+
+            <h3>Plastic Bottles</h3>
+
+            <p class="business">Pure Water Co.</p>
+
+            <p>📍 Islamabad</p>
+
+            <p>600 Pieces</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+        <!-- Product 4 -->
+
+        <article class="product-card">
+
+            <img src="images/cardboard.jpg" alt="Cardboard">
+
+            <h3>Cardboard Boxes</h3>
+
+            <p class="business">QuickShip Logistics</p>
+
+            <p>📍 Faisalabad</p>
+
+            <p>300 Pieces</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+        <!-- Product 5 -->
+
+        <article class="product-card">
+
+            <img src="images/glass.jpg" alt="Glass Bottles">
+
+            <h3>Glass Bottles</h3>
+
+            <p class="business">Fresh Drinks</p>
+
+            <p>📍 Multan</p>
+
+            <p>180 Pieces</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+        <!-- Product 6 -->
+
+        <article class="product-card">
+
+            <img src="images/metal.jpg" alt="Metal Sheets">
+
+            <h3>Metal Sheets</h3>
+
+            <p class="business">Steel Works</p>
+
+            <p>📍 Karachi</p>
+
+            <p>75 Sheets</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+        <!-- Product 7 -->
+
+        <article class="product-card">
+
+            <img src="images/paper.jpg" alt="Paper Waste">
+
+            <h3>Paper Waste</h3>
+
+            <p class="business">PrintPro</p>
+
+            <p>📍 Lahore</p>
+
+            <p>90 kg</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+        <!-- Product 8 -->
+
+        <article class="product-card">
+
+            <img src="images/electronics.jpg" alt="Electronics">
+
+            <h3>E-Waste Components</h3>
+
+            <p class="business">Tech Solutions</p>
+
+            <p>📍 Karachi</p>
+
+            <p>45 kg</p>
+
+            <button class="request-btn">
+                Request Material
+            </button>
+
+        </article>
+
+    </section>
+
+</main>
+
+<!-- LOGIN POPUP -->
+
+<div class="popup" id="loginPopup">
+
+    <div class="popup-content">
+
+        <h2>Sign In Required</h2>
+
+        <p>
+
+            You can browse all materials without an account.
+
+            To request materials, please sign in first.
+
+        </p>
+
+        <a href="login.html">
+            <button class="login-btn">
+                Login
+            </button>
+        </a>
+
+        <button class="close-btn">
+
+            Maybe Later
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+
+        © 2026 ReLoop | Connecting Businesses Through Sustainable Resource Sharing
+
+    </p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard | ReLoop</title>
+
+<link rel="stylesheet" href="dashboard.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+ <script>
+
+const token = localStorage.getItem("token");
+const role = localStorage.getItem("role");
+
+if (!token) {
+    window.location.href = "login.html";
+}
+
+if (role !== "business") {
+    alert("Access denied.");
+    window.location.href = "login.html";
+}
+
+</script>
+
+<aside class="sidebar">
+
+    <h2 class="logo">♻ ReLoop</h2>
+
+    <ul>
+
+        <li id="dashboardBtn" class="active">Dashboard</li>
+
+        <li id="listingsBtn">My Listings</li>
+
+        <li id="addMaterialBtn">Add Material</li>
+
+        <li id="requestsBtn">Requests</li>
+
+        <li id="notificationsBtn">Notifications</li>
+
+        <li id="profileBtn">Profile</li>
+
+        <li id="logoutBtn">Logout</li>
+
+    </ul>
+
+</aside>
+
+<!-- Main -->
+
+<div class="main-content" id="content"> 
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="business-dashboard.js"></script>
+
+
+</body>
+
+</html>
