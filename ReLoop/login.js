@@ -21,6 +21,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         const data = await response.json();
 
         if (response.ok) {
+            console.log("LOGIN SUCCESS", data);
 
     // Save login information
     localStorage.setItem("token", data.token);
@@ -31,11 +32,22 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     alert("Login successful!");
 
     // Redirect based on role
-    if (data.user.role === "business") {
-        window.location.href = "business-dashboard.html";
-    } else {
-        window.location.href = "recycler-dashboard.html";
-    }
+    
+    alert("Login successful!");
+
+console.log("ROLE:", data.user.role);
+    
+if(data.user.role === "business"){
+
+    window.location.href="business-dashboard.html";
+
+}
+
+else if(data.user.role === "user" || data.user.role === "recycler"){
+
+    window.location.href="recycler-dashboard.html";
+
+}
 
 } else {
 

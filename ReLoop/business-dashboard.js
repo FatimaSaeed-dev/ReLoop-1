@@ -140,7 +140,7 @@ async function loadRequests(){
 
         const response = await fetch(
 
-            `http://localhost:5000/api/requests/business/${businessId}`
+            `http://localhost:5000/api/request/business/${businessId}`
 
         );
 
@@ -257,6 +257,9 @@ Reject
 
 </button>
 
+<button onclick="openChat('${request.chat}')">
+    Open Chat 💬
+</button>
 
 
             </div>
@@ -350,7 +353,7 @@ async function loadDashboardStats(){
         const requestResponse =
         await fetch(
 
-            `http://localhost:5000/api/requests/business/${ownerId}`
+            `http://localhost:5000/api/request/business/${ownerId}`
 
         );
 
@@ -1146,7 +1149,7 @@ async function acceptRequest(id){
         const response =
         await fetch(
 
-        `http://localhost:5000/api/requests/${id}/accept`,
+        `http://localhost:5000/api/request/${id}/accept`,
 
         {
 
@@ -1201,7 +1204,7 @@ async function rejectRequest(id){
         const response =
         await fetch(
 
-        `http://localhost:5000/api/requests/${id}/reject`,
+        `http://localhost:5000/api/request/${id}/reject`,
 
         {
 
@@ -1425,5 +1428,17 @@ function loadRequestsPage(){
 
     loadRequests();
 
+
+}
+
+function openChat(chatId){
+
+    localStorage.setItem(
+        "chatId",
+        chatId
+    );
+
+
+    window.location.href="chat.html";
 
 }

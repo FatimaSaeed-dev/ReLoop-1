@@ -188,7 +188,7 @@ document
 
         const response = await fetch(
 
-            "http://localhost:5000/api/requests",
+            "http://localhost:5000/api/request",
 
             {
 
