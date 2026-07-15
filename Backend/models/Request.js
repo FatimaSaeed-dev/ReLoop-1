@@ -53,11 +53,15 @@ const RequestSchema = new mongoose.Schema({
     },
 
 
-    businessConfirmed: {
-        type: Boolean,
-        default: false
-    }
+businessConfirmed: {
+    type:Boolean,
+    default:false
+},
 
+chat: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Chat"
+}
 
 }, {
     timestamps: true

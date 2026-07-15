@@ -2,6 +2,8 @@ require("dotenv").config();
 
 console.log("ENV =", process.env.MONGO_URI);
 
+const messageRoutes =
+require("./routes/message");
 const authRoutes = require("./routes/auth");
 const materialRoutes = require("./routes/material");
 const requestRoutes = require("./routes/request");
@@ -24,12 +26,14 @@ app.use(express.json());
 const PORT = 5000;
 
 app.use("/api/auth", authRoutes);
+
 app.use("/api/materials", materialRoutes);
-app.use("/api/requests", requestRoutes);
-app.use(
-"/api/notifications",
-notificationRoutes
-);
+
+app.use("/api/request", requestRoutes);
+
+app.use("/api/notifications", notificationRoutes);
+
+app.use("/api/messages", messageRoutes);
 
 app.get("/", (req, res) => {
     res.send("ReLoop Backend is Running!");

@@ -7,6 +7,8 @@ const Request = require("../models/Request");
 const Notification =
 require("../models/Notification");
 
+const Chat =
+require("../models/Chat");
 
 // CREATE REQUEST
 
@@ -130,14 +132,16 @@ router.get("/user/:id", async(req,res)=>{
 
         .populate("material","name images")
 
-        .populate("business","username");
+        .populate("business","username")
 
+        .populate("chat");
 
 
         res.json(requests);
 
 
-    }catch(error){
+    }
+    catch(error){
 
 
         res.status(500).json({
@@ -154,32 +158,113 @@ router.get("/user/:id", async(req,res)=>{
 
 // ACCEPT REQUEST
 
+// ACCEPT REQUEST
+
 router.put("/:id/accept", async(req,res)=>{
 
+    try {
 
-    try{
-
-
-        const request =
-        await Request.findByIdAndUpdate(
-
-            req.params.id,
-
-            {
-                status:"accepted"
-            },
-
-            {
-                new:true
-            }
-
+        const request = await Request.findById(
+            req.params.id
         );
+
+
+        if(!request){
+
+            return res.status(404).json({
+                message:"Request not found"
+            });
+
+        }
+
+
+        request.status = "accepted";
+
+
+        const chat = await Chat.create({
+
+            request: request._id,
+
+            participants:[
+
+                request.user,
+
+                request.business
+
+            ]
+
+        });
+
+
+        request.chat = chat._id;
+
+
+        await request.save();
+
+
+
+        console.log("Chat created:", chat._id);
 
 
 
         res.json({
 
             message:"Request accepted",
+
+            request
+
+        });
+
+
+    }
+    catch(error){
+
+        console.log(error);
+
+        res.status(500).json({
+
+            message:error.message
+
+        });
+
+    }
+
+});
+
+router.put("/:id/confirm", async(req,res)=>{
+
+
+    try{
+
+
+        const request =
+        await Request.findById(req.params.id);
+
+
+
+        if(!request){
+
+            return res.status(404).json({
+
+                message:"Request not found"
+
+            });
+
+        }
+
+
+
+        request.status = "completed";
+
+
+
+        await request.save();
+
+
+
+        res.json({
+
+            message:"User confirmed request",
 
             request
 
@@ -203,57 +288,35 @@ router.put("/:id/accept", async(req,res)=>{
 
 });
 
-
-
-
-// REJECT REQUEST
-
 router.put("/:id/reject", async(req,res)=>{
-
 
     try{
 
+        const request = await Request.findById(req.params.id);
 
-        const request =
-        await Request.findByIdAndUpdate(
+        if(!request){
+            return res.status(404).json({
+                message:"Request not found"
+            });
+        }
 
-            req.params.id,
+        request.status = "rejected";
 
-            {
-                status:"rejected"
-            },
-
-            {
-                new:true
-            }
-
-        );
-
-
+        await request.save();
 
         res.json({
-
             message:"Request rejected",
-
             request
-
         });
-
-
 
     }
     catch(error){
 
-
         res.status(500).json({
-
             message:error.message
-
         });
 
-
     }
-
 
 });
 
