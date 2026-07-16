@@ -74,8 +74,8 @@ Completed
 
 loadUserStats();
 
-
 }
+
 
 
 
@@ -178,6 +178,22 @@ container.innerHTML="";
 
 
 
+if(requests.length===0){
+
+container.innerHTML = `
+
+<p>
+No requests yet.
+</p>
+
+`;
+
+return;
+
+}
+
+
+
 requests.forEach(request=>{
 
 
@@ -204,7 +220,6 @@ ${request.quantity} kg
 </p>
 
 
-
 <p>
 Status:
 ${request.status}
@@ -213,18 +228,15 @@ ${request.status}
 
 
 ${
-request.status==="accepted"
-
+request.chat
 ?
-
-`<button onclick="confirmRequest('${request._id}')">
-Confirm Request
-</button>`
-
+`
+<button onclick="openChat('${request.chat._id}')">
+Message Business 💬
+</button>
+`
 :
-
 ""
-
 }
 
 
@@ -232,12 +244,11 @@ Confirm Request
 </div>
 
 
-
 `;
 
 
-});
 
+});
 
 
 }
@@ -246,11 +257,21 @@ catch(error){
 
 console.log(error);
 
+
+document.getElementById("requestsContainer").innerHTML = `
+
+<p>
+Could not load requests.
+</p>
+
+`;
+
 }
 
 
 
 }
+
 
 
 
@@ -272,7 +293,10 @@ Coming soon...
 `;
 
 
+
 }
+
+
 
 
 
@@ -281,98 +305,273 @@ document.getElementById("dashboardBtn")
 .onclick=showDashboard;
 
 
+
 document.getElementById("requestsBtn")
 .onclick=showRequests;
+
 
 
 document.getElementById("notificationsBtn")
 .onclick=showNotifications;
 
 
+document.getElementById("messagesBtn")
+.onclick=showMessages;
+
 
 document.getElementById("logoutBtn")
 .onclick=()=>{
 
+
 localStorage.clear();
 
+
 window.location.href="login.html";
+
 
 };
 
 
 
+
+
+
 showDashboard();
+
+
+
+
+
+
+
 
 async function confirmRequest(id){
 
-    const confirm = window.confirm(
-        "Confirm this material request?"
-    );
 
-    if(!confirm){
-        return;
-    }
+const confirm = window.confirm(
+"Confirm this material request?"
+);
+
+
+
+if(!confirm){
+
+return;
+
+}
+
+
+
+try{
+
+
+const response = await fetch(
+
+`http://localhost:5000/api/request/${id}/confirm`,
+
+{
+
+method:"PUT",
+
+headers:{
+
+"Content-Type":"application/json"
+
+}
+
+}
+
+);
+
+
+
+
+const data = await response.json();
+
+
+
+if(response.ok){
+
+
+alert("Request confirmed!");
+
+
+showRequests();
+
+
+}
+
+else{
+
+
+alert(data.message);
+
+
+}
+
+
+
+}
+
+catch(error){
+
+
+console.log(error);
+
+
+alert("Confirmation failed");
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+async function showMessages(){
+
+    const userId = localStorage.getItem("userId");
+
+
+    document.getElementById("content").innerHTML = `
+
+    <h1>
+    Messages 💬
+    </h1>
+
+    <div id="chatList">
+
+        Loading chats...
+
+    </div>
+
+    `;
+
 
 
     try{
 
+
         const response = await fetch(
-            `http://localhost:5000/api/request/${id}/confirm`,
-            {
-                method:"PUT",
-                headers:{
-                    "Content-Type":"application/json"
-                }
-            }
+
+            `http://localhost:5000/api/messages/user/${userId}`
+
         );
 
 
-        const data = await response.json();
+        const chats = await response.json();
 
 
-        if(response.ok){
 
-            alert("Request confirmed!");
+        const container =
+        document.getElementById("chatList");
 
-            showRequests();
+
+
+        container.innerHTML = "";
+
+
+
+        if(chats.length === 0){
+
+            container.innerHTML = `
+
+            <p>
+            No chats yet.
+            </p>
+
+            `;
+
+            return;
 
         }
-        else{
 
-            alert(data.message);
 
-        }
+
+        chats.forEach(chat=>{
+
+
+            const otherUser =
+            chat.participants.find(
+                user => user._id !== userId
+            );
+
+
+
+            container.innerHTML += `
+
+
+            <div class="card">
+
+
+                <h3>
+                ${otherUser.username}
+                </h3>
+
+
+                <button onclick="openChat('${chat._id}')">
+
+                Open Chat 💬
+
+                </button>
+
+
+            </div>
+
+
+            `;
+
+
+        });
 
 
     }
+
+
     catch(error){
+
 
         console.log(error);
 
-        alert("Confirmation failed");
+
+        document.getElementById("chatList").innerHTML = `
+
+        <p>
+        Chats not loaded.
+        </p>
+
+        `;
+
 
     }
 
-}
 
-${
-request.status==="accepted" && request.chat
-?
-`
-<button onclick="openChat('${request.chat._id}')">
-Message Business 💬
-</button>
-`
-:
-""
 }
 
 function openChat(chatId){
+
+    console.log("Opening chat:", chatId);
+
+
+    if(!chatId){
+
+        alert("Chat ID missing");
+
+        return;
+
+    }
+
 
     localStorage.setItem(
         "chatId",
         chatId
     );
+
 
     window.location.href="chat.html";
 

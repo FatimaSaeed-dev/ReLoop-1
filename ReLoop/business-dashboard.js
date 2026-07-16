@@ -1073,72 +1073,82 @@ async function editMaterial(id){
 // ===============================
 
 
-document
-.getElementById("addMaterialBtn")
-.addEventListener(
-    "click",
-    showAddMaterial
-);
+document.addEventListener("DOMContentLoaded", ()=>{
+
+
+    document
+    .getElementById("addMaterialBtn")
+    .addEventListener(
+        "click",
+        showAddMaterial
+    );
 
 
 
-document
-.getElementById("dashboardBtn")
-.addEventListener(
-    "click",
-    showDashboard
-);
+    document
+    .getElementById("messagesBtn")
+    .addEventListener(
+        "click",
+        showMessages
+    );
 
 
 
-document
-.getElementById("listingsBtn")
-.addEventListener(
-    "click",
-    showMyListings
-);
-
-document
-.getElementById("notificationsBtn")
-.addEventListener(
-    "click",
-    showNotifications
-);
-
-document
-.getElementById("requestsBtn")
-.addEventListener(
-    "click",
-    loadRequestsPage
-);
-
-document
-.getElementById("logoutBtn")
-.addEventListener(
-"click",
-()=>{
+    document
+    .getElementById("dashboardBtn")
+    .addEventListener(
+        "click",
+        showDashboard
+    );
 
 
-    localStorage.clear();
+
+    document
+    .getElementById("listingsBtn")
+    .addEventListener(
+        "click",
+        showMyListings
+    );
 
 
-    window.location.href =
-    "login.html";
+
+    document
+    .getElementById("notificationsBtn")
+    .addEventListener(
+        "click",
+        showNotifications
+    );
+
+
+
+    document
+    .getElementById("requestsBtn")
+    .addEventListener(
+        "click",
+        loadRequestsPage
+    );
+
+
+
+    document
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        ()=>{
+
+            localStorage.clear();
+
+            window.location.href="login.html";
+
+        }
+    );
+
+
+
+    showDashboard();
 
 
 });
-
-
-
-
-
-
-// ===============================
-// START DASHBOARD
-// ===============================
-
-
-showDashboard();
 
 async function acceptRequest(id){
 
@@ -1243,6 +1253,127 @@ async function rejectRequest(id){
 
     }
 
+
+}
+
+async function showMessages(){
+
+
+const userId = localStorage.getItem("userId");
+
+
+
+document.getElementById("content").innerHTML = `
+
+
+<h1>
+Messages 💬
+</h1>
+
+
+<div id="chatList">
+
+Loading chats...
+
+</div>
+
+
+`;
+
+
+
+try{
+
+
+const response = await fetch(
+
+`http://localhost:5000/api/messages/user/${userId}`
+
+);
+
+
+
+const chats = await response.json();
+
+
+
+const container =
+document.getElementById("chatList");
+
+
+
+container.innerHTML="";
+
+
+
+if(chats.length===0){
+
+
+container.innerHTML = `
+
+<p>
+No chats yet.
+</p>
+
+`;
+
+return;
+
+}
+
+
+
+chats.forEach(chat=>{
+
+
+    const otherUser = chat.participants.find(
+        user => String(user._id) !== String(userId)
+    );
+
+
+
+    container.innerHTML += `
+
+
+    <div class="card">
+
+
+        <h3>
+
+        ${otherUser ? otherUser.username : "Unknown User"}
+
+        </h3>
+
+
+
+        <button onclick="openChat('${chat._id}')">
+
+            Open Chat 💬
+
+        </button>
+
+
+
+    </div>
+
+
+    `;
+
+
+
+});
+
+catch(error){
+
+console.log("MESSAGES ERROR:", error);
+
+document.getElementById("chatList").innerHTML = `
+
+<p>
+Chats not loaded.
+</p>
+
+`;
 
 }
 
@@ -1432,6 +1563,18 @@ function loadRequestsPage(){
 }
 
 function openChat(chatId){
+
+    console.log("Opening chat:", chatId);
+
+
+    if(!chatId){
+
+        alert("Chat ID missing");
+
+        return;
+
+    }
+
 
     localStorage.setItem(
         "chatId",

@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 
 
-const MessageSchema = new mongoose.Schema({
+const MessageSchema = new mongoose.Schema(
 
-    chat: {
+{
 
-        type: mongoose.Schema.Types.ObjectId,
+    chat:{
+
+        type:mongoose.Schema.Types.ObjectId,
 
         ref:"Chat",
 
@@ -14,9 +16,9 @@ const MessageSchema = new mongoose.Schema({
     },
 
 
-    sender: {
+    sender:{
 
-        type: mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
 
         ref:"User",
 
@@ -25,25 +27,41 @@ const MessageSchema = new mongoose.Schema({
     },
 
 
-    text: {
+    text:{
 
         type:String,
 
-        required:true
+        required:true,
 
-    },
+        trim:true,
 
-
-    createdAt: {
-
-        type:Date,
-
-        default:Date.now
+        maxlength:1000
 
     }
 
 
+},
+
+{
+
+    timestamps:true
+
+}
+
+);
+
+
+
+// Faster loading when opening a chat
+
+MessageSchema.index({
+
+    chat:1,
+
+    createdAt:1
+
 });
+
 
 
 module.exports =

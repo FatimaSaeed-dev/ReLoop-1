@@ -1,26 +1,32 @@
 const mongoose = require("mongoose");
 
 
-const ChatSchema = new mongoose.Schema({
+const ChatSchema = new mongoose.Schema(
+
+{
 
     request: {
 
         type: mongoose.Schema.Types.ObjectId,
 
-        ref: "Request",
+        ref:"Request",
 
-        required:true
+        required:true,
+
+        unique:true
 
     },
 
 
-    participants: [
+    participants:[
 
         {
 
-            type: mongoose.Schema.Types.ObjectId,
+            type:mongoose.Schema.Types.ObjectId,
 
-            ref:"User"
+            ref:"User",
+
+            required:true
 
         }
 
@@ -28,9 +34,40 @@ const ChatSchema = new mongoose.Schema({
 
 
 },
+
 {
+
     timestamps:true
+
+}
+
+);
+
+
+
+// Make sure a chat always has two people
+ChatSchema.path("participants").validate(
+
+    function(value){
+
+        return value.length === 2;
+
+    },
+
+    "A chat must have exactly two participants"
+
+);
+
+
+
+// Faster searching for user chats
+
+ChatSchema.index({
+
+    participants:1
+
 });
+
 
 
 module.exports =
