@@ -50,6 +50,31 @@ function showDashboard() {
                 Requests Received
             </p>
 
+            <div class="card">
+
+<h2 id="acceptedRequests">
+0
+</h2>
+
+<p>
+Accepted Requests
+</p>
+
+</div>
+
+
+
+<div class="card">
+
+<h2 id="completedRequests">
+0
+</h2>
+
+<p>
+Completed Requests
+</p>
+
+</div>
         </div>
 
 
@@ -306,7 +331,26 @@ async function loadRequests(){
 
                 }
 
+${
+    request.status === "accepted"
 
+    ?
+
+    `
+
+    <button onclick="businessComplete('${request._id}')">
+
+    Mark Exchange Complete ✅
+
+    </button>
+
+    `
+
+    :
+
+    ""
+
+}
 
             </div>
 
@@ -390,9 +434,11 @@ async function loadDashboardStats(){
 
             materials.forEach(material=>{
 
+
                 total += Number(
                     material.quantity || 0
                 );
+
 
             });
 
@@ -400,10 +446,12 @@ async function loadDashboardStats(){
 
             document.getElementById(
                 "wasteShared"
-            ).innerText = total + " kg";
+            ).innerText =
+            total + " kg";
 
 
         }
+
 
 
 
@@ -422,12 +470,59 @@ async function loadDashboardStats(){
 
 
 
+
         if(Array.isArray(requests)){
+
+
+
+            const completed =
+            requests.filter(
+                request =>
+                request.status === "completed"
+            ).length;
+
+
+
+
+            const accepted =
+            requests.filter(
+                request =>
+                request.status === "accepted"
+            ).length;
+
+
 
 
             document.getElementById(
                 "totalRequests"
-            ).innerText = requests.length;
+            ).innerText =
+            requests.length;
+
+
+
+            document.getElementById(
+                "acceptedRequests"
+            ).innerText =
+            accepted;
+
+
+
+            document.getElementById(
+                "completedRequests"
+            ).innerText =
+            completed;
+
+
+
+
+            console.log(
+                "Business Requests:",
+                {
+                    total: requests.length,
+                    accepted,
+                    completed
+                }
+            );
 
 
         }
@@ -1375,31 +1470,34 @@ async function showNotifications(){
 
 
 
-        notifications.forEach(notification=>{
+     container.innerHTML += `
 
 
-            container.innerHTML += `
+<div class="card">
 
 
-            <div class="card">
-
-                <h3>
-                🔔 Notification
-                </h3>
+<h3>
+🔔 Notification
+</h3>
 
 
-                <p>
-                ${notification.message}
-                </p>
+<p>
+${notification.message}
+</p>
 
 
-            </div>
+
+<button onclick="openNotification('${notification.request?._id}')">
+
+View Request
+
+</button>
 
 
-            `;
+</div>
 
 
-        });
+`;
 
 
 
@@ -1485,6 +1583,81 @@ function openChat(chatId){
 
 }
 
+async function businessComplete(id){
+
+
+    const confirmComplete =
+    confirm(
+        "Mark this exchange as completed?"
+    );
+
+
+    if(!confirmComplete)
+    return;
+
+
+
+    try{
+
+
+        const response =
+        await fetch(
+
+        `http://localhost:5000/api/request/${id}/business-confirm`,
+
+        {
+
+            method:"PUT"
+
+        }
+
+        );
+
+
+
+        const data =
+        await response.json();
+
+
+
+        if(response.ok){
+
+
+            alert(
+                "Waiting for recycler confirmation ✅"
+            );
+
+
+            loadRequests();
+
+
+        }
+        else{
+
+
+            alert(data.message);
+
+
+        }
+
+
+
+    }
+    catch(error){
+
+
+        console.log(error);
+
+
+        alert(
+            "Could not confirm completion"
+        );
+
+
+    }
+
+
+}
 // ===============================
 // SIDEBAR BUTTONS
 // ===============================
@@ -1535,3 +1708,221 @@ document
 // START PAGE
 
 showDashboard();
+async function acceptRequest(id){
+
+
+    try{
+
+
+        const response = await fetch(
+
+            `http://localhost:5000/api/request/${id}/accept`,
+
+            {
+                method:"PUT",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            }
+
+        );
+
+
+
+        const data =
+        await response.json();
+
+
+
+        if(response.ok){
+
+
+            alert("Request accepted");
+
+
+            showDashboard();
+
+
+        }
+        else{
+
+
+            alert(data.message);
+
+
+        }
+
+
+    }
+    catch(error){
+
+
+        console.log(
+            "Accept error:",
+            error
+        );
+
+
+        alert("Could not accept request");
+
+
+    }
+
+
+}
+async function rejectRequest(id){
+
+
+    try{
+
+
+        const response = await fetch(
+
+            `http://localhost:5000/api/request/${id}/reject`,
+
+            {
+                method:"PUT",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            }
+
+        );
+
+
+
+        const data =
+        await response.json();
+
+
+
+        if(response.ok){
+
+
+            alert("Request rejected");
+
+
+            showDashboard();
+
+loadNotificationBadge();
+
+
+        }
+        else{
+
+
+            alert(data.message);
+
+
+        }
+
+
+    }
+    catch(error){
+
+
+        console.log(
+            "Reject error:",
+            error
+        );
+
+
+        alert("Could not reject request");
+
+
+    }
+
+
+}
+
+async function loadNotificationBadge(){
+
+
+const userId =
+localStorage.getItem("userId");
+
+
+
+try{
+
+
+const response = await fetch(
+
+`http://localhost:5000/api/notifications/${userId}`
+
+);
+
+
+
+const notifications =
+await response.json();
+
+
+
+const badge =
+document.getElementById(
+"notificationBadge"
+);
+
+
+
+if(!badge)
+return;
+
+
+
+if(notifications.length > 0){
+
+
+badge.innerText =
+notifications.length;
+
+
+badge.style.display =
+"inline-block";
+
+
+}
+else{
+
+
+badge.style.display =
+"none";
+
+
+}
+
+
+
+}
+
+
+catch(error){
+
+console.log(
+"Badge error:",
+error
+);
+
+}
+
+
+}
+
+function openNotification(requestId){
+
+
+if(!requestId){
+
+alert("Request not found");
+
+return;
+
+}
+
+
+
+showRequests();
+
+
+}
