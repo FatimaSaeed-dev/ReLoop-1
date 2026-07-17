@@ -1,130 +1,124 @@
+// ===============================
+// BUSINESS DASHBOARD
+// ===============================
 function showDashboard() {
 
-    const username = localStorage.getItem("username");
+    const username = localStorage.getItem("username") || "Business";
 
 
     document.getElementById("content").innerHTML = `
 
 
-  <header>
+    <header>
 
-<h1>
-Welcome back, ${username}!
-</h1>
+        <h1>
+            Welcome back, ${username}!
+        </h1>
 
+        <p>
+            Manage your reusable resources.
+        </p>
 
-<p>
-Manage your reusable resources.
-</p>
-
-
-</header>
+    </header>
 
 
 
-        <section class="stats">
+    <section class="stats">
 
 
-            <div class="card">
+        <div class="card">
 
-                <h2 id="totalListings">
-                    0
-                </h2>
-
-                <p>
-                    Total Listings
-                </p>
-
-            </div>
-
-
-
-            <div class="card">
-
-                <h2 id="totalRequests">
-                    0
-                </h2>
-
-                <p>
-                    Requests Received
-                </p>
-
-            </div>
-
-
-
-
-            <div class="card">
-
-                <h2 id="wasteShared">
-                    0 kg
-                </h2>
-
-                <p>
-                    Waste Shared
-                </p>
-
-            </div>
-
-
-
-            <div class="card">
-
-                <h2 id="activeListings">
-                    0
-                </h2>
-
-                <p>
-                    Active Listings
-                </p>
-
-            </div>
-
-
-        </section>
-
-
-
-
-
-        <section class="requests-section">
-
-
-            <h2>
-                Incoming Requests
+            <h2 id="totalListings">
+                0
             </h2>
 
+            <p>
+                Total Listings
+            </p>
+
+        </div>
 
 
-            <div id="requestsContainer">
+
+        <div class="card">
+
+            <h2 id="totalRequests">
+                0
+            </h2>
+
+            <p>
+                Requests Received
+            </p>
+
+        </div>
 
 
-                <p>
-                    Loading requests...
-                </p>
+
+        <div class="card">
+
+            <h2 id="wasteShared">
+                0 kg
+            </h2>
+
+            <p>
+                Waste Shared
+            </p>
+
+        </div>
 
 
-            </div>
+
+        <div class="card">
+
+            <h2 id="activeListings">
+                0
+            </h2>
+
+            <p>
+                Active Listings
+            </p>
+
+        </div>
 
 
-        </section>
+    </section>
 
+
+
+
+    <section class="requests-section">
+
+
+        <h2>
+            Incoming Requests
+        </h2>
+
+
+        <div id="requestsContainer">
+
+            Loading requests...
+
+        </div>
+
+
+    </section>
 
 
     `;
-
 
 
     loadRequests();
 
     loadDashboardStats();
 
-
 }
 
 
 
 
+// ===============================
+// LOAD REQUESTS
+// ===============================
 
 
 async function loadRequests(){
@@ -151,13 +145,30 @@ async function loadRequests(){
 
 
 
-
         const container =
         document.getElementById("requestsContainer");
 
 
 
-        if(!container) return;
+        if(!container)
+        return;
+
+
+
+        if(!Array.isArray(requests)){
+
+
+            container.innerHTML = `
+
+            <p>
+            Could not load requests.
+            </p>
+
+            `;
+
+            return;
+
+        }
 
 
 
@@ -167,18 +178,15 @@ async function loadRequests(){
 
             container.innerHTML = `
 
-                <p>
-                    No requests yet.
-                </p>
+            <p>
+            No requests yet.
+            </p>
 
             `;
 
-
             return;
 
-
         }
-
 
 
 
@@ -186,8 +194,21 @@ async function loadRequests(){
 
 
 
+        requests.forEach(request=>{
 
-        requests.forEach(request => {
+
+            const materialName =
+            request.material?.name || "Material";
+
+
+
+            const username =
+            request.user?.username || "User";
+
+
+
+            const chatId =
+            request.chat?._id || request.chat;
 
 
 
@@ -198,75 +219,99 @@ async function loadRequests(){
 
 
                 <h2>
-
-                    ${request.material.name}
-
+                    ${materialName}
                 </h2>
 
 
 
                 <p>
-
                     Requested by:
-                    ${request.user.username}
-
+                    ${username}
                 </p>
 
 
 
                 <p>
-
                     Quantity:
                     ${request.quantity} kg
-
                 </p>
 
 
 
                 <p>
-
                     Location:
                     ${request.location}
-
                 </p>
 
 
 
                 <p>
-
                     Message:
-                    ${request.message}
-
+                    ${request.message || "No message"}
                 </p>
 
 
 
-                <button
-onclick="acceptRequest('${request._id}')">
 
-Accept
+                ${
+                    request.status === "pending"
 
-</button>
+                    ?
+
+                    `
+
+                    <button onclick="acceptRequest('${request._id}')">
+
+                    Accept
+
+                    </button>
 
 
 
-<button
-onclick="rejectRequest('${request._id}')">
+                    <button onclick="rejectRequest('${request._id}')">
 
-Reject
+                    Reject
 
-</button>
+                    </button>
 
-<button onclick="openChat('${request.chat}')">
-    Open Chat 💬
-</button>
+                    `
+
+                    :
+
+                    ""
+
+                }
+
+
+
+
+                ${
+                    chatId
+
+                    ?
+
+                    `
+
+                    <button onclick="openChat('${chatId}')">
+
+                    Open Chat 💬
+
+                    </button>
+
+                    `
+
+                    :
+
+                    ""
+
+                }
+
 
 
             </div>
 
 
             `;
-
 
 
         });
@@ -279,7 +324,10 @@ Reject
     catch(error){
 
 
-        console.log(error);
+        console.log(
+            "Loading requests error:",
+            error
+        );
 
 
     }
@@ -291,9 +339,12 @@ Reject
 
 
 
+// ===============================
+// DASHBOARD STATS
+// ===============================
+
 
 async function loadDashboardStats(){
-
 
 
     const ownerId =
@@ -307,7 +358,7 @@ async function loadDashboardStats(){
         const materialResponse =
         await fetch(
 
-            `http://localhost:5000/api/materials/owner/${ownerId}`
+        `http://localhost:5000/api/materials/owner/${ownerId}`
 
         );
 
@@ -318,34 +369,41 @@ async function loadDashboardStats(){
 
 
 
-
-        document.getElementById("totalListings").innerText =
-        materials.length;
+        if(Array.isArray(materials)){
 
 
-
-        document.getElementById("activeListings").innerText =
-        materials.length;
+            document.getElementById(
+                "totalListings"
+            ).innerText = materials.length;
 
 
 
-        let total =
-        0;
+            document.getElementById(
+                "activeListings"
+            ).innerText = materials.length;
 
 
 
-        materials.forEach(material=>{
-
-
-            total += Number(material.quantity);
-
-
-        });
+            let total = 0;
 
 
 
-        document.getElementById("wasteShared").innerText =
-        total + " kg";
+            materials.forEach(material=>{
+
+                total += Number(
+                    material.quantity || 0
+                );
+
+            });
+
+
+
+            document.getElementById(
+                "wasteShared"
+            ).innerText = total + " kg";
+
+
+        }
 
 
 
@@ -353,7 +411,7 @@ async function loadDashboardStats(){
         const requestResponse =
         await fetch(
 
-            `http://localhost:5000/api/request/business/${ownerId}`
+        `http://localhost:5000/api/request/business/${ownerId}`
 
         );
 
@@ -364,26 +422,40 @@ async function loadDashboardStats(){
 
 
 
-        document.getElementById("totalRequests").innerText =
-        requests.length;
+        if(Array.isArray(requests)){
+
+
+            document.getElementById(
+                "totalRequests"
+            ).innerText = requests.length;
+
+
+        }
 
 
 
     }
-
 
 
     catch(error){
 
 
-        console.log(error);
+        console.log(
+            "Stats error:",
+            error
+        );
 
 
     }
 
 
-
 }
+
+// ===============================
+// ADD MATERIAL
+// ===============================
+
+
 function showAddMaterial(){
 
 
@@ -396,11 +468,9 @@ function showAddMaterial(){
             Add Material
         </h1>
 
-
         <p>
             List reusable materials for recyclers.
         </p>
-
 
     </header>
 
@@ -414,11 +484,11 @@ function showAddMaterial(){
             Material Name
         </label>
 
-
-        <input
+        <input 
         type="text"
         id="materialName"
         required>
+
 
 
 
@@ -427,37 +497,36 @@ function showAddMaterial(){
         </label>
 
 
-
         <select id="category" required>
 
 
             <option value="">
-                Choose Category
+            Choose Category
             </option>
 
 
             <option value="Plastic">
-                Plastic
+            Plastic
             </option>
 
 
             <option value="Metal">
-                Metal
+            Metal
             </option>
 
 
             <option value="Wood">
-                Wood
+            Wood
             </option>
 
 
             <option value="Paper">
-                Paper
+            Paper
             </option>
 
 
             <option value="Glass">
-                Glass
+            Glass
             </option>
 
 
@@ -515,7 +584,7 @@ function showAddMaterial(){
 
 
         <label>
-            Upload Images
+            Images
         </label>
 
 
@@ -530,13 +599,11 @@ function showAddMaterial(){
         <br><br>
 
 
-
         <button type="submit">
 
             Add Material
 
         </button>
-
 
 
     </form>
@@ -550,29 +617,200 @@ function showAddMaterial(){
 
 
 
+// ===============================
+// ADD MATERIAL SUBMIT
+// ===============================
 
 
+document.addEventListener(
+"submit",
+async(e)=>{
+
+
+    if(e.target.id !== "materialForm")
+    return;
+
+
+
+    e.preventDefault();
+
+
+
+    const formData =
+    new FormData();
+
+
+
+    formData.append(
+        "name",
+        document.getElementById("materialName").value
+    );
+
+
+    formData.append(
+        "category",
+        document.getElementById("category").value
+    );
+
+
+    formData.append(
+        "quantity",
+        document.getElementById("quantity").value
+    );
+
+
+    formData.append(
+        "pricePerKg",
+        document.getElementById("pricePerKg").value
+    );
+
+
+    formData.append(
+        "location",
+        document.getElementById("location").value
+    );
+
+
+    formData.append(
+        "description",
+        document.getElementById("description").value
+    );
+
+
+    formData.append(
+        "owner",
+        localStorage.getItem("userId")
+    );
+
+
+
+    const images =
+    document.getElementById("images").files;
+
+
+
+    for(let i=0;i<images.length;i++){
+
+
+        formData.append(
+            "images",
+            images[i]
+        );
+
+
+    }
+
+
+
+
+    try{
+
+
+        const response =
+        await fetch(
+
+        "http://localhost:5000/api/materials",
+
+        {
+
+            method:"POST",
+
+
+            headers:{
+
+                Authorization:
+                localStorage.getItem("token")
+
+            },
+
+
+            body:formData
+
+
+        }
+
+
+        );
+
+
+
+        const data =
+        await response.json();
+
+
+
+        if(response.ok){
+
+
+            alert(
+                "Material added successfully"
+            );
+
+
+            showDashboard();
+
+
+        }
+        else{
+
+
+            alert(
+                data.message
+            );
+
+
+        }
+
+
+    }
+
+
+    catch(error){
+
+
+        console.log(
+            "Adding material error:",
+            error
+        );
+
+
+        alert(
+            "Server error"
+        );
+
+
+    }
+
+
+});
+
+
+
+
+
+
+// ===============================
+// MY LISTINGS
+// ===============================
 
 
 async function showMyListings(){
 
 
-
     document.getElementById("content").innerHTML = `
 
 
-        <h1>
-            My Listings
-        </h1>
+    <h1>
+        My Listings
+    </h1>
 
 
 
-        <div id="listingsContainer">
+    <div id="listingsContainer">
 
-            Loading...
+        Loading...
 
-        </div>
-
+    </div>
 
 
     `;
@@ -590,7 +828,7 @@ async function showMyListings(){
         const response =
         await fetch(
 
-            `http://localhost:5000/api/materials/owner/${ownerId}`
+        `http://localhost:5000/api/materials/owner/${ownerId}`
 
         );
 
@@ -602,21 +840,30 @@ async function showMyListings(){
 
 
         const container =
-        document.getElementById("listingsContainer");
+        document.getElementById(
+            "listingsContainer"
+        );
 
 
 
-        if(materials.length === 0){
+        if(!Array.isArray(materials)){
 
 
-            container.innerHTML = `
+            container.innerHTML =
+            "<p>Unable to load listings</p>";
 
-                <p>
-                You have no listings.
-                </p>
+            return;
 
-            `;
+        }
 
+
+
+
+        if(materials.length===0){
+
+
+            container.innerHTML =
+            "<p>No listings yet.</p>";
 
             return;
 
@@ -625,13 +872,12 @@ async function showMyListings(){
 
 
 
-        container.innerHTML = "";
 
+        container.innerHTML="";
 
 
 
         materials.forEach(material=>{
-
 
 
             container.innerHTML += `
@@ -642,7 +888,7 @@ async function showMyListings(){
 
 
                 <h2>
-                    ${material.name}
+                ${material.name}
                 </h2>
 
 
@@ -676,25 +922,24 @@ async function showMyListings(){
 
 
                 <p>
-                ${material.description}
+                ${material.description || ""}
                 </p>
 
 
 
-                <button
-                onclick="editMaterial('${material._id}')">
 
-                    Edit
+                <button onclick="editMaterial('${material._id}')">
+
+                Edit
 
                 </button>
 
 
 
 
-                <button
-                onclick="deleteMaterial('${material._id}')">
+                <button onclick="deleteMaterial('${material._id}')">
 
-                    Delete
+                Delete
 
                 </button>
 
@@ -717,13 +962,13 @@ async function showMyListings(){
     catch(error){
 
 
-        console.log(error);
-
-        alert("Could not load listings");
+        console.log(
+            "Listings error:",
+            error
+        );
 
 
     }
-
 
 
 }
@@ -733,204 +978,16 @@ async function showMyListings(){
 
 
 
-
-
-
-document.addEventListener("submit", async(e)=>{
-
-
-    if(e.target.id !== "materialForm")
-    return;
-
-
-
-    e.preventDefault();
-
-
-
-
-    const formData =
-    new FormData();
-
-
-
-
-    formData.append(
-        "name",
-        document.getElementById("materialName").value
-    );
-
-
-
-    formData.append(
-        "category",
-        document.getElementById("category").value
-    );
-
-
-
-    formData.append(
-        "quantity",
-        document.getElementById("quantity").value
-    );
-
-
-
-    formData.append(
-        "pricePerKg",
-        document.getElementById("pricePerKg").value
-    );
-
-
-
-    formData.append(
-        "location",
-        document.getElementById("location").value
-    );
-
-
-
-    formData.append(
-        "description",
-        document.getElementById("description").value
-    );
-
-
-
-    formData.append(
-        "owner",
-        localStorage.getItem("userId")
-    );
-
-
-
-
-
-    const images =
-    document.getElementById("images").files;
-
-
-
-    for(let i=0;i<images.length;i++){
-
-
-        formData.append(
-            "images",
-            images[i]
-        );
-
-
-    }
-
-
-
-
-
-
-    try{
-
-
-        const response =
-        await fetch(
-
-            "http://localhost:5000/api/materials",
-
-            {
-
-                method:"POST",
-
-
-                headers:{
-
-
-                    "Authorization":
-                    localStorage.getItem("token")
-
-
-                },
-
-
-                body:formData
-
-            }
-
-
-        );
-
-
-
-        const data =
-        await response.json();
-
-
-
-
-        if(response.ok){
-
-
-            alert(
-                "Material added successfully"
-            );
-
-
-            showDashboard();
-
-
-        }
-
-
-        else{
-
-
-            alert(data.message);
-
-
-        }
-
-
-
-    }
-
-
-
-    catch(error){
-
-
-        console.log(error);
-
-        alert(
-            "Server error"
-        );
-
-
-    }
-
-
-
-});
-
-
-
-
-
-
-
+// ===============================
+// DELETE MATERIAL
+// ===============================
 
 
 async function deleteMaterial(id){
 
 
-
-    const confirmDelete =
-    confirm(
-        "Delete this material?"
-    );
-
-
-
-    if(!confirmDelete)
+    if(!confirm("Delete this material?"))
     return;
-
 
 
 
@@ -940,20 +997,15 @@ async function deleteMaterial(id){
         const response =
         await fetch(
 
-            `http://localhost:5000/api/materials/${id}`,
+        `http://localhost:5000/api/materials/${id}`,
 
-            {
+        {
 
-                method:"DELETE"
+            method:"DELETE"
 
-            }
+        }
 
         );
-
-
-
-        const data =
-        await response.json();
 
 
 
@@ -975,7 +1027,6 @@ async function deleteMaterial(id){
     }
 
 
-
     catch(error){
 
 
@@ -985,29 +1036,26 @@ async function deleteMaterial(id){
     }
 
 
-
 }
 
 
 
 
 
-
-
+// ===============================
+// EDIT MATERIAL
+// ===============================
 
 
 async function editMaterial(id){
-
 
 
     const name =
     prompt("Material name");
 
 
-
     const quantity =
     prompt("Quantity");
-
 
 
     const pricePerKg =
@@ -1015,16 +1063,17 @@ async function editMaterial(id){
 
 
 
+    try{
 
-    const response =
-    await fetch(
+
+        const response =
+        await fetch(
 
         `http://localhost:5000/api/materials/${id}`,
 
         {
 
             method:"PUT",
-
 
             headers:{
 
@@ -1044,135 +1093,9 @@ async function editMaterial(id){
 
             })
 
-
-        }
-
-    );
-
-
-
-
-    if(response.ok){
-
-
-        alert(
-            "Material updated"
-        );
-
-
-        showMyListings();
-
-
-    }
-
-
-
-}
-// ===============================
-// BUTTON EVENTS
-// ===============================
-
-
-document.addEventListener("DOMContentLoaded", ()=>{
-
-
-    document
-    .getElementById("addMaterialBtn")
-    .addEventListener(
-        "click",
-        showAddMaterial
-    );
-
-
-
-    document
-    .getElementById("messagesBtn")
-    .addEventListener(
-        "click",
-        showMessages
-    );
-
-
-
-    document
-    .getElementById("dashboardBtn")
-    .addEventListener(
-        "click",
-        showDashboard
-    );
-
-
-
-    document
-    .getElementById("listingsBtn")
-    .addEventListener(
-        "click",
-        showMyListings
-    );
-
-
-
-    document
-    .getElementById("notificationsBtn")
-    .addEventListener(
-        "click",
-        showNotifications
-    );
-
-
-
-    document
-    .getElementById("requestsBtn")
-    .addEventListener(
-        "click",
-        loadRequestsPage
-    );
-
-
-
-    document
-    .getElementById("logoutBtn")
-    .addEventListener(
-        "click",
-        ()=>{
-
-            localStorage.clear();
-
-            window.location.href="login.html";
-
-        }
-    );
-
-
-
-    showDashboard();
-
-
-});
-
-async function acceptRequest(id){
-
-
-    try{
-
-
-        const response =
-        await fetch(
-
-        `http://localhost:5000/api/request/${id}/accept`,
-
-        {
-
-            method:"PUT"
-
         }
 
         );
-
-
-
-        const data =
-        await response.json();
 
 
 
@@ -1180,76 +1103,24 @@ async function acceptRequest(id){
 
 
             alert(
-                "Request accepted"
+                "Material updated"
             );
 
 
-            loadRequests();
+            showMyListings();
 
 
         }
 
 
-
     }
+
+
     catch(error){
+
 
         console.log(error);
 
-    }
-
-
-}
-
-
-
-
-
-async function rejectRequest(id){
-
-
-    try{
-
-
-        const response =
-        await fetch(
-
-        `http://localhost:5000/api/request/${id}/reject`,
-
-        {
-
-            method:"PUT"
-
-        }
-
-        );
-
-
-
-        const data =
-        await response.json();
-
-
-
-        if(response.ok){
-
-
-            alert(
-                "Request rejected"
-            );
-
-
-            loadRequests();
-
-
-        }
-
-
-
-    }
-    catch(error){
-
-        console.log(error);
 
     }
 
@@ -1258,206 +1129,48 @@ async function rejectRequest(id){
 
 async function showMessages(){
 
-
-const userId = localStorage.getItem("userId");
-
-
-
-document.getElementById("content").innerHTML = `
-
-
-<h1>
-Messages 💬
-</h1>
-
-
-<div id="chatList">
-
-Loading chats...
-
-</div>
-
-
-`;
-
-
-
-try{
-
-
-const response = await fetch(
-
-`http://localhost:5000/api/messages/user/${userId}`
-
-);
-
-
-
-const chats = await response.json();
-
-
-
-const container =
-document.getElementById("chatList");
-
-
-
-container.innerHTML="";
-
-
-
-if(chats.length===0){
-
-
-container.innerHTML = `
-
-<p>
-No chats yet.
-</p>
-
-`;
-
-return;
-
-}
-
-
-
-chats.forEach(chat=>{
-
-
-    const otherUser = chat.participants.find(
-        user => String(user._id) !== String(userId)
-    );
-
-
-
-    container.innerHTML += `
-
-
-    <div class="card">
-
-
-        <h3>
-
-        ${otherUser ? otherUser.username : "Unknown User"}
-
-        </h3>
-
-
-
-        <button onclick="openChat('${chat._id}')">
-
-            Open Chat 💬
-
-        </button>
-
-
-
-    </div>
-
-
-    `;
-
-
-
-});
-
-catch(error){
-
-console.log("MESSAGES ERROR:", error);
-
-document.getElementById("chatList").innerHTML = `
-
-<p>
-Chats not loaded.
-</p>
-
-`;
-
-}
-
-async function showNotifications(){
+    const userId = localStorage.getItem("userId");
 
 
     document.getElementById("content").innerHTML = `
 
-
-        <header>
-
-            <h1>
-                Notifications
-            </h1>
-
-            <p>
-                Stay updated with your material requests.
-            </p>
-
-        </header>
+    <header>
+        <h1>
+        Messages 💬
+        </h1>
+    </header>
 
 
+    <div id="chatList">
 
-        <div id="notificationsContainer">
+        Loading chats...
 
-            Loading notifications...
-
-        </div>
-
+    </div>
 
     `;
-
-
-
-    const userId =
-    localStorage.getItem("userId");
 
 
 
     try{
 
 
-        const response =
-        await fetch(
+        const response = await fetch(
 
-            `http://localhost:5000/api/notifications/${userId}`
+            `http://localhost:5000/api/messages/user/${userId}`
 
         );
 
 
+        const chats = await response.json();
 
-        const notifications =
-        await response.json();
+
+
+        console.log("Chats:", chats);
 
 
 
         const container =
-        document.getElementById(
-            "notificationsContainer"
-        );
-
-
-
-        if(notifications.length === 0){
-
-
-            container.innerHTML = `
-
-                <div class="card">
-
-                    <p>
-                    No notifications yet.
-                    </p>
-
-                </div>
-
-            `;
-
-
-            return;
-
-
-        }
-
+        document.getElementById("chatList");
 
 
 
@@ -1465,7 +1178,51 @@ async function showNotifications(){
 
 
 
-        notifications.forEach(notification=>{
+        if(!Array.isArray(chats)){
+
+            throw new Error("Invalid chats response");
+
+        }
+
+
+
+        if(chats.length === 0){
+
+
+            container.innerHTML = `
+
+            <div class="card">
+
+                <p>
+                No chats available.
+                </p>
+
+            </div>
+
+            `;
+
+            return;
+
+        }
+
+
+
+
+
+        chats.forEach(chat=>{
+
+
+
+            const otherUser =
+            chat.participants?.find(
+                user => user._id !== userId
+            );
+
+
+
+            if(!otherUser)
+            return;
+
 
 
             container.innerHTML += `
@@ -1475,25 +1232,17 @@ async function showNotifications(){
 
 
                 <h3>
-                🔔 Notification
+                ${otherUser.username}
                 </h3>
 
 
-                <p>
 
-                ${notification.message}
+                <button 
+                onclick="openChat('${chat._id}')">
 
-                </p>
+                    Open Chat 💬
 
-
-
-                <small>
-
-                ${new Date(
-                    notification.createdAt
-                ).toLocaleString()}
-
-                </small>
+                </button>
 
 
             </div>
@@ -1512,16 +1261,23 @@ async function showNotifications(){
     catch(error){
 
 
-        console.log(error);
+        console.log(
+            "Messages Error:",
+            error
+        );
 
 
-        document.getElementById(
-            "notificationsContainer"
-        ).innerHTML = `
+        document.getElementById("chatList").innerHTML = `
 
-        <p>
-        Could not load notifications.
-        </p>
+
+        <div class="card">
+
+            <p>
+            Chats not loaded.
+            </p>
+
+        </div>
+
 
         `;
 
@@ -1529,8 +1285,141 @@ async function showNotifications(){
     }
 
 
+}
+
+
+
+
+
+
+
+async function showNotifications(){
+
+
+    document.getElementById("content").innerHTML = `
+
+
+    <header>
+
+        <h1>
+        Notifications
+        </h1>
+
+    </header>
+
+
+    <div id="notificationsContainer">
+
+    Loading...
+
+    </div>
+
+
+    `;
+
+
+    const userId =
+    localStorage.getItem("userId");
+
+
+
+    try{
+
+
+        const response = await fetch(
+
+        `http://localhost:5000/api/notifications/${userId}`
+
+        );
+
+
+
+        const notifications =
+        await response.json();
+
+
+
+        const container =
+        document.getElementById(
+            "notificationsContainer"
+        );
+
+
+
+        if(!notifications.length){
+
+
+            container.innerHTML = `
+
+
+            <div class="card">
+
+                <p>
+                No notifications yet.
+                </p>
+
+            </div>
+
+
+            `;
+
+
+            return;
+
+        }
+
+
+
+
+        container.innerHTML="";
+
+
+
+        notifications.forEach(notification=>{
+
+
+            container.innerHTML += `
+
+
+            <div class="card">
+
+                <h3>
+                🔔 Notification
+                </h3>
+
+
+                <p>
+                ${notification.message}
+                </p>
+
+
+            </div>
+
+
+            `;
+
+
+        });
+
+
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+
+    }
+
 
 }
+
+
+
+
+
+
 
 function loadRequestsPage(){
 
@@ -1547,9 +1436,10 @@ function loadRequestsPage(){
     </header>
 
 
+
     <div id="requestsContainer">
 
-        Loading requests...
+    Loading requests...
 
     </div>
 
@@ -1562,18 +1452,24 @@ function loadRequestsPage(){
 
 }
 
-function openChat(chatId){
 
-    console.log("Opening chat:", chatId);
+
+
+
+
+function openChat(chatId){
 
 
     if(!chatId){
 
-        alert("Chat ID missing");
+        alert(
+            "Chat ID missing"
+        );
 
         return;
 
     }
+
 
 
     localStorage.setItem(
@@ -1582,6 +1478,60 @@ function openChat(chatId){
     );
 
 
-    window.location.href="chat.html";
+
+    window.location.href =
+    "chat.html";
+
 
 }
+
+// ===============================
+// SIDEBAR BUTTONS
+// ===============================
+
+
+document
+.getElementById("dashboardBtn")
+.onclick = showDashboard;
+
+
+document
+.getElementById("listingsBtn")
+.onclick = showMyListings;
+
+
+document
+.getElementById("addMaterialBtn")
+.onclick = showAddMaterial;
+
+
+document
+.getElementById("requestsBtn")
+.onclick = loadRequestsPage;
+
+
+document
+.getElementById("messagesBtn")
+.onclick = showMessages;
+
+
+document
+.getElementById("notificationsBtn")
+.onclick = showNotifications;
+
+
+document
+.getElementById("logoutBtn")
+.onclick = ()=>{
+
+    localStorage.clear();
+
+    window.location.href="login.html";
+
+};
+
+
+
+// START PAGE
+
+showDashboard();
