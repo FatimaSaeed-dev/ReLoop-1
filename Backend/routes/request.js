@@ -117,7 +117,35 @@ router.get("/business/:id", async (req,res)=>{
 
 
 // GET USER REQUESTS
+// GET USER REQUESTS
 
+router.get("/user/:id", async (req, res) => {
+
+    try {
+
+        const requests = await Request.find({
+
+            user: req.params.id
+
+        })
+        .populate("material", "name images")
+        .populate("business", "username")
+        .populate("chat");
+
+        res.json(requests);
+
+    }
+    catch (error) {
+
+        res.status(500).json({
+
+            message: error.message
+
+        });
+
+    }
+
+});
 
 // ACCEPT REQUEST
 
@@ -401,6 +429,9 @@ router.put("/:id/reject", async(req,res)=>{
     }
 
 });
+
+
+module.exports = router;
 
 
 module.exports = router;

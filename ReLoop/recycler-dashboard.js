@@ -277,24 +277,55 @@ Could not load requests.
 
 
 
-async function showNotifications(){
+notifications.forEach(async(notification)=>{
 
+    container.innerHTML += `
 
-document.getElementById("content").innerHTML = `
+    <div class="card">
 
-<h1>
-Notifications
-</h1>
+        <h3>
+            🔔 Notification
+        </h3>
 
-<p>
-Coming soon...
-</p>
+        <p>
+            ${notification.message}
+        </p>
 
-`;
+        <small>
+            ${new Date(notification.createdAt).toLocaleString()}
+        </small>
 
+    </div>
 
+    `;
 
-}
+    if(!notification.read){
+
+        try{
+
+            await fetch(
+
+                `http://localhost:5000/api/notifications/${notification._id}/read`,
+
+                {
+
+                    method:"PUT"
+
+                }
+
+            );
+
+        }
+
+        catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+
+});
 
 
 

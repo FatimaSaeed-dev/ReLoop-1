@@ -1503,6 +1503,64 @@ View Request
 
     }
 
+container.innerHTML = "";
+
+notifications.forEach(async(notification)=>{
+
+    container.innerHTML += `
+
+    <div class="card">
+
+        <h3>
+            🔔 Notification
+        </h3>
+
+        <p>
+            ${notification.message}
+        </p>
+
+        <small>
+            ${new Date(notification.createdAt).toLocaleString()}
+        </small>
+
+        <button onclick="openNotification('${notification.request?._id}')">
+
+            View Request
+
+        </button>
+
+    </div>
+
+    `;
+
+    if(!notification.read){
+
+        try{
+
+            await fetch(
+
+                `http://localhost:5000/api/notifications/${notification._id}/read`,
+
+                {
+
+                    method:"PUT"
+
+                }
+
+            );
+
+        }
+
+        catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+
+});
+
     catch(error){
 
         console.log(error);
