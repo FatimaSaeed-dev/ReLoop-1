@@ -433,3 +433,11 @@ tr:hover{
     display:none;
 
 }
+
+.highlight-card{
+
+    border:3px solid #2E7D32;
+
+    background:#E8F5E9;
+
+}

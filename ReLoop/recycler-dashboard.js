@@ -2,9 +2,7 @@ function showDashboard(){
 
 const username = localStorage.getItem("username");
 
-
 document.getElementById("content").innerHTML = `
-
 
 <header>
 
@@ -18,10 +16,7 @@ Manage your material requests.
 
 </header>
 
-
-
 <section class="stats">
-
 
 <div class="card">
 
@@ -35,8 +30,6 @@ Requests Sent
 
 </div>
 
-
-
 <div class="card">
 
 <h2 id="acceptedRequests">
@@ -48,9 +41,6 @@ Accepted
 </p>
 
 </div>
-
-
-
 
 <div class="card">
 
@@ -64,15 +54,27 @@ Completed
 
 </div>
 
-
-
 </section>
 
+<section class="requests-section">
 
+<h2>
+My Requests
+</h2>
+
+<div id="requestsContainer">
+
+Loading...
+
+</div>
+
+</section>
 
 `;
 
 loadUserStats();
+
+showRequestsOnDashboard();
 
 }
 
@@ -272,60 +274,177 @@ Could not load requests.
 
 }
 
+async function showRequestsOnDashboard(){
+
+const userId = localStorage.getItem("userId");
+
+try{
+
+const response = await fetch(
+
+`http://localhost:5000/api/request/user/${userId}`
+
+);
+
+const requests = await response.json();
+
+const container =
+document.getElementById("requestsContainer");
+
+if(!container) return;
+
+container.innerHTML = "";
+
+if(requests.length===0){
+
+container.innerHTML = `
+
+<p>
+No requests yet.
+</p>
+
+`;
+
+return;
+
+}
+
+requests.forEach(request=>{
+
+    const highlight =
+localStorage.getItem("highlightRequest") === request._id;
+
+container.innerHTML += `
+
+<div class="card ${highlight ? "highlight-card" : ""}">
+
+<h3>
+${request.material.name}
+</h3>
+
+<p>
+Business:
+${request.business.username}
+</p>
+
+<p>
+Status:
+${request.status}
+</p>
+
+</div>
+
+`;
+
+});
+
+localStorage.removeItem(
+    "highlightRequest"
+);
+
+}
+catch(error){
+
+console.log(error);
+
+}
+}
 
 
+async function showNotifications(){
 
+    document.getElementById("content").innerHTML = `
 
+    <h1>
+    Notifications
+    </h1>
 
-notifications.forEach(async(notification)=>{
-
-    container.innerHTML += `
-
-    <div class="card">
-
-        <h3>
-            🔔 Notification
-        </h3>
-
-        <p>
-            ${notification.message}
-        </p>
-
-        <small>
-            ${new Date(notification.createdAt).toLocaleString()}
-        </small>
-
+    <div id="notificationsContainer">
+        Loading...
     </div>
 
     `;
 
-    if(!notification.read){
+    const userId = localStorage.getItem("userId");
 
-        try{
+    try{
 
-            await fetch(
+        const response = await fetch(
+            `http://localhost:5000/api/notifications/${userId}`
+        );
 
-                `http://localhost:5000/api/notifications/${notification._id}/read`,
+        const notifications = await response.json();
 
-                {
+        const container =
+        document.getElementById("notificationsContainer");
 
-                    method:"PUT"
+        container.innerHTML = "";
+
+        if(!notifications.length){
+
+            container.innerHTML = `
+                <p>No notifications yet.</p>
+            `;
+
+            return;
+        }
+
+        notifications.forEach(async(notification)=>{
+
+            container.innerHTML += `
+
+            <div class="card">
+
+                <h3>🔔 Notification</h3>
+
+    <p>${notification.message}</p>
+
+<button onclick="openNotification('${notification.request?._id}')">
+
+View Request
+
+</button>
+
+<small>
+    ${new Date(notification.createdAt).toLocaleString()}
+</small>
+
+            `;
+
+            if(!notification.read){
+
+                try{
+
+                    await fetch(
+                        `http://localhost:5000/api/notifications/${notification._id}/read`,
+                        {
+                            method:"PUT"
+                        }
+                    );
+
+                }
+                catch(error){
+
+                    console.log(error);
 
                 }
 
-            );
+            }
 
-        }
+        });
 
-        catch(error){
+    }
+    catch(error){
 
-            console.log(error);
+        console.log(error);
 
-        }
+        document.getElementById("notificationsContainer").innerHTML = `
+            <p>Could not load notifications.</p>
+        `;
 
     }
 
-});
+}
 
 
 
@@ -390,7 +509,6 @@ if(!confirm){
 return;
 
 }
-
 
 
 try{
@@ -605,5 +723,24 @@ function openChat(chatId){
 
 
     window.location.href="chat.html";
+
+}
+
+function openNotification(requestId){
+
+    if(!requestId){
+
+        alert("Request not found.");
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "highlightRequest",
+        requestId
+    );
+
+    showRequests();
 
 }

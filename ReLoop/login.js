@@ -24,11 +24,11 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             console.log("LOGIN SUCCESS", data);
 
     // Save login information
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("username", data.user.username);
-    localStorage.setItem("role", data.user.role);
-    localStorage.setItem("userId", data.user.id);
-
+localStorage.setItem("token", data.token);
+localStorage.setItem("username", data.user.username);
+localStorage.setItem("email", data.user.email);
+localStorage.setItem("role", data.user.role);
+localStorage.setItem("userId", data.user.id);
     alert("Login successful!");
 
     // Redirect based on role
@@ -37,15 +37,13 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
 console.log("ROLE:", data.user.role);
     
-if(data.user.role === "business"){
+if (data.user.role === "business") {
 
-    window.location.href="business-dashboard.html";
+    window.location.href = "business-dashboard.html";
 
-}
+} else if (data.user.role === "recycler") {
 
-else if(data.user.role === "user" || data.user.role === "recycler"){
-
-    window.location.href="recycler-dashboard.html";
+    window.location.href = "recycler-dashboard.html";
 
 }
 

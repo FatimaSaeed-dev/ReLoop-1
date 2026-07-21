@@ -1,3 +1,4 @@
+const upload = require("../middleware/upload");
 const authMiddleware = require("../middleware/auth");
 const express=require("express");
 const bcrypt=require("bcrypt");
@@ -84,12 +85,89 @@ res.json({
 
 });
 
-router.get("/profile", authMiddleware, (req, res) => {
+router.get("/profile", authMiddleware, async (req, res) => {
 
-    res.json({
-        message: "You can access your profile",
-        user: req.user
-    });
+    try{
+
+        const user = await User.findById(req.user.id).select("-password");
+
+        if(!user){
+
+            return res.status(404).json({
+                message: "User not found"
+            });
+
+        }
+
+        res.json(user);
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
 
 });
+
+router.put(
+    "/profile",
+    authMiddleware,
+    upload.single("profileImage"),
+    async (req, res) => {
+
+        try{
+
+            const updateData = {
+
+                username: req.body.username,
+                email: req.body.email
+
+            };
+
+            if(req.file){
+
+                updateData.profileImage = req.file.path;
+
+            }
+
+            const updatedUser = await User.findByIdAndUpdate(
+
+                req.user.id,
+
+                updateData,
+
+                { new: true }
+
+            ).select("-password");
+
+            res.json({
+
+                message: "Profile updated successfully",
+
+                user: updatedUser
+
+            });
+
+        }
+
+        catch(error){
+
+            console.log(error);
+
+            res.status(500).json({
+
+                message: error.message
+
+            });
+
+        }
+
+    }
+);
 module.exports=router;

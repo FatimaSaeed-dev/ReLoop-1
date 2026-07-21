@@ -5,9 +5,7 @@ function showDashboard() {
 
     const username = localStorage.getItem("username") || "Business";
 
-
     document.getElementById("content").innerHTML = `
-
 
     <header>
 
@@ -21,103 +19,45 @@ function showDashboard() {
 
     </header>
 
-
-
     <section class="stats">
 
-
         <div class="card">
-
-            <h2 id="totalListings">
-                0
-            </h2>
-
-            <p>
-                Total Listings
-            </p>
-
+            <h2 id="totalListings">0</h2>
+            <p>Total Listings</p>
         </div>
 
-
-
         <div class="card">
-
-            <h2 id="totalRequests">
-                0
-            </h2>
-
-            <p>
-                Requests Received
-            </p>
-
-            <div class="card">
-
-<h2 id="acceptedRequests">
-0
-</h2>
-
-<p>
-Accepted Requests
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<h2 id="completedRequests">
-0
-</h2>
-
-<p>
-Completed Requests
-</p>
-
-</div>
+            <h2 id="totalRequests">0</h2>
+            <p>Requests Received</p>
         </div>
 
-
-
         <div class="card">
-
-            <h2 id="wasteShared">
-                0 kg
-            </h2>
-
-            <p>
-                Waste Shared
-            </p>
-
+            <h2 id="acceptedRequests">0</h2>
+            <p>Accepted Requests</p>
         </div>
 
-
-
         <div class="card">
-
-            <h2 id="activeListings">
-                0
-            </h2>
-
-            <p>
-                Active Listings
-            </p>
-
+            <h2 id="completedRequests">0</h2>
+            <p>Completed Requests</p>
         </div>
 
+        <div class="card">
+            <h2 id="wasteShared">0 kg</h2>
+            <p>Waste Shared</p>
+        </div>
+
+        <div class="card">
+            <h2 id="activeListings">0</h2>
+            <p>Active Listings</p>
+        </div>
 
     </section>
 
-
-
-
     <section class="requests-section">
-
 
         <h2>
             Incoming Requests
         </h2>
-
 
         <div id="requestsContainer">
 
@@ -125,16 +65,12 @@ Completed Requests
 
         </div>
 
-
     </section>
-
 
     `;
 
-
-    loadRequests();
-
     loadDashboardStats();
+    loadRequests();
 
 }
 
@@ -1382,199 +1318,99 @@ async function showMessages(){
 
 }
 
-
-
-
-
-
-
 async function showNotifications(){
-
 
     document.getElementById("content").innerHTML = `
 
-
     <header>
-
-        <h1>
-        Notifications
-        </h1>
-
+        <h1>Notifications</h1>
     </header>
 
-
     <div id="notificationsContainer">
-
-    Loading...
-
+        Loading...
     </div>
-
 
     `;
 
-
-    const userId =
-    localStorage.getItem("userId");
-
-
+    const userId = localStorage.getItem("userId");
 
     try{
 
-
         const response = await fetch(
-
-        `http://localhost:5000/api/notifications/${userId}`
-
+            `http://localhost:5000/api/notifications/${userId}`
         );
 
-
-
-        const notifications =
-        await response.json();
-
-
+        const notifications = await response.json();
 
         const container =
-        document.getElementById(
-            "notificationsContainer"
-        );
-
-
+        document.getElementById("notificationsContainer");
 
         if(!notifications.length){
 
-
             container.innerHTML = `
-
-
-            <div class="card">
-
-                <p>
-                No notifications yet.
-                </p>
-
-            </div>
-
-
+                <div class="card">
+                    <p>No notifications yet.</p>
+                </div>
             `;
-
 
             return;
 
         }
 
+        container.innerHTML = "";
 
+        notifications.forEach(async(notification)=>{
 
+            container.innerHTML += `
 
-        container.innerHTML="";
+            <div class="card">
 
+                <h3>🔔 Notification</h3>
 
+                <p>${notification.message}</p>
 
-     container.innerHTML += `
+                <small>
+                    ${new Date(notification.createdAt).toLocaleString()}
+                </small>
 
+                <button onclick="openNotification('${notification.request?._id}')">
+                    View Request
+                </button>
 
-<div class="card">
+            </div>
 
+            `;
 
-<h3>
-🔔 Notification
-</h3>
+            if(!notification.read){
 
+                try{
 
-<p>
-${notification.message}
-</p>
+                    await fetch(
+                        `http://localhost:5000/api/notifications/${notification._id}/read`,
+                        {
+                            method:"PUT"
+                        }
+                    );
 
+                }
+                catch(error){
 
-
-<button onclick="openNotification('${notification.request?._id}')">
-
-View Request
-
-</button>
-
-
-</div>
-
-
-`;
-
-
-
-    }
-
-container.innerHTML = "";
-
-notifications.forEach(async(notification)=>{
-
-    container.innerHTML += `
-
-    <div class="card">
-
-        <h3>
-            🔔 Notification
-        </h3>
-
-        <p>
-            ${notification.message}
-        </p>
-
-        <small>
-            ${new Date(notification.createdAt).toLocaleString()}
-        </small>
-
-        <button onclick="openNotification('${notification.request?._id}')">
-
-            View Request
-
-        </button>
-
-    </div>
-
-    `;
-
-    if(!notification.read){
-
-        try{
-
-            await fetch(
-
-                `http://localhost:5000/api/notifications/${notification._id}/read`,
-
-                {
-
-                    method:"PUT"
+                    console.log(error);
 
                 }
 
-            );
+            }
 
-        }
-
-        catch(error){
-
-            console.log(error);
-
-        }
+        });
 
     }
-
-});
-
     catch(error){
 
         console.log(error);
 
-
     }
 
-
 }
-
-
-
-
-
 
 
 function loadRequestsPage(){
@@ -1716,6 +1552,155 @@ async function businessComplete(id){
 
 
 }
+
+async function showProfile() {
+
+    document.getElementById("content").innerHTML = `
+
+    <header>
+
+        <h1>My Profile</h1>
+
+        <p>View and manage your account information.</p>
+
+    </header>
+
+    <div class="profile-card">
+
+        <div class="profile-image-section">
+
+            <img
+                id="profilePreview"
+                class="profile-image"
+                src="https://placehold.co/180x180?text=Profile"
+            >
+
+            <input
+                type="file"
+                id="profileImage"
+                accept="image/*"
+                style="display:none"
+            >
+
+            <button id="changePhotoBtn">
+                Change Photo
+            </button>
+
+        </div>
+
+        <div class="profile-details">
+
+            <label>Username</label>
+
+            <input
+                id="profileUsername"
+                disabled
+            >
+
+            <label>Email</label>
+
+            <input
+                id="profileEmail"
+                disabled
+            >
+
+            <label>Role</label>
+
+            <input
+                id="profileRole"
+                disabled
+            >
+
+            <label>Joined</label>
+
+            <input
+                id="profileJoined"
+                disabled
+            >
+
+            <br><br>
+
+            <button id="editProfileBtn">
+
+                Edit Profile
+
+            </button>
+
+            <button
+                id="saveProfileBtn"
+                style="display:none"
+            >
+
+                Save Changes
+
+            </button>
+
+            <button
+                id="cancelProfileBtn"
+                style="display:none"
+            >
+
+                Cancel
+
+            </button>
+
+        </div>
+
+    </div>
+
+    `;
+
+    try{
+
+        const response = await fetch(
+
+            "http://localhost:5000/api/auth/profile",
+
+            {
+
+                headers:{
+
+                    Authorization:
+                    localStorage.getItem("token")
+
+                }
+
+            }
+
+        );
+
+        const user = await response.json();
+
+        document.getElementById("profileUsername").value =
+        user.username;
+
+        document.getElementById("profileEmail").value =
+        user.email;
+
+        document.getElementById("profileRole").value =
+        user.role;
+
+        document.getElementById("profileJoined").value =
+        new Date(user.createdAt).toLocaleDateString();
+
+        if(user.profileImage){
+
+            document.getElementById("profilePreview").src =
+            user.profileImage;
+
+        }
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        alert("Could not load profile.");
+
+    }
+
+}
 // ===============================
 // SIDEBAR BUTTONS
 // ===============================
@@ -1750,6 +1735,9 @@ document
 .getElementById("notificationsBtn")
 .onclick = showNotifications;
 
+document
+.getElementById("profileBtn")
+.onclick = showProfile;
 
 document
 .getElementById("logoutBtn")
@@ -1932,13 +1920,26 @@ return;
 if(notifications.length > 0){
 
 
-badge.innerText =
-notifications.length;
+const unread = notifications.filter(
+
+    notification => !notification.read
+
+).length;
 
 
-badge.style.display =
-"inline-block";
+if(unread > 0){
 
+    badge.style.display = "inline-block";
+
+    badge.innerText = unread;
+
+}
+
+else{
+
+    badge.style.display = "none";
+
+}
 
 }
 else{
@@ -1969,18 +1970,17 @@ error
 
 function openNotification(requestId){
 
+    if(!requestId){
 
-if(!requestId){
+        alert("Request not found.");
 
-alert("Request not found");
+        return;
 
-return;
+    }
 
-}
+    // Open the Requests page
+    loadRequestsPage();
 
-
-
-showRequests();
-
+loadDashboardStats();
 
 }
