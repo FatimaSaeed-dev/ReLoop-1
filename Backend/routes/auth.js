@@ -123,12 +123,19 @@ router.put(
 
         try{
 
-            const updateData = {
+            const updateData = {};
 
-                username: req.body.username,
-                email: req.body.email
+if(req.body.username){
+    updateData.username = req.body.username.trim();
+}
 
-            };
+if(req.body.email){
+    updateData.email = req.body.email.trim().toLowerCase();
+}
+
+if(req.file){
+    updateData.profileImage = req.file.path;
+}
 
             if(req.file){
 
@@ -142,7 +149,10 @@ router.put(
 
                 updateData,
 
-                { new: true }
+                {
+    new: true,
+    runValidators: true
+}
 
             ).select("-password");
 
