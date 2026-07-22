@@ -446,7 +446,134 @@ View Request
 
 }
 
+// ... existing functions like openChat and openNotification ...
 
+// ===============================
+// PROFILE
+// ===============================
+async function showProfile() {
+  document.getElementById("content").innerHTML = `
+    <header>
+      <h1>My Profile</h1>
+      <p>View and manage your account information.</p>
+    </header>
+    <div class="profile-card">
+      <div class="profile-image-section">
+        <img id="profilePreview" class="profile-image" src="https://placehold.co/180x180?text=Profile">
+        <input type="file" id="profileImage" accept="image/*" style="display:none">
+        <button id="changePhotoBtn">Change Photo</button>
+      </div>
+      <div class="profile-details">
+        <label>Username</label><input id="profileUsername" disabled>
+        <label>Email</label><input id="profileEmail" disabled>
+        <label>Role</label><input id="profileRole" disabled>
+        <label>Joined</label><input id="profileJoined" disabled>
+        <br><br>
+        <button id="editProfileBtn">Edit Profile</button>
+        <button id="saveProfileBtn" style="display:none">Save Changes</button>
+        <button id="cancelProfileBtn" style="display:none">Cancel</button>
+      </div>
+    </div>
+  `;
+
+  try {
+    const response = await fetch("http://localhost:5000/api/auth/profile", {
+      headers: { Authorization: localStorage.getItem("token") },
+    });
+
+    const user = await response.json();
+
+    const usernameInput = document.getElementById("profileUsername");
+    const emailInput = document.getElementById("profileEmail");
+    const imageInput = document.getElementById("profileImage");
+    const preview = document.getElementById("profilePreview");
+    const editBtn = document.getElementById("editProfileBtn");
+    const saveBtn = document.getElementById("saveProfileBtn");
+    const cancelBtn = document.getElementById("cancelProfileBtn");
+    const changePhotoBtn = document.getElementById("changePhotoBtn");
+
+    usernameInput.value = user.username || "";
+    emailInput.value = user.email || "";
+    document.getElementById("profileRole").value = user.role || "";
+    document.getElementById("profileJoined").value = user.createdAt
+      ? new Date(user.createdAt).toLocaleDateString()
+      : "";
+
+    if (user.profileImage) {
+      preview.src = user.profileImage;
+    }
+
+    const originalUsername = user.username;
+    const originalEmail = user.email;
+    const originalImage = user.profileImage;
+
+    editBtn.onclick = () => {
+      usernameInput.disabled = false;
+      emailInput.disabled = false;
+      saveBtn.style.display = "inline-block";
+      cancelBtn.style.display = "inline-block";
+      editBtn.style.display = "none";
+    };
+
+    changePhotoBtn.onclick = () => imageInput.click();
+
+    imageInput.onchange = () => {
+      const file = imageInput.files[0];
+      if (file) preview.src = URL.createObjectURL(file);
+    };
+
+    cancelBtn.onclick = () => {
+      usernameInput.value = originalUsername;
+      emailInput.value = originalEmail;
+      preview.src = originalImage || "https://placehold.co/180x180?text=Profile";
+      usernameInput.disabled = true;
+      emailInput.disabled = true;
+      saveBtn.style.display = "none";
+      cancelBtn.style.display = "none";
+      editBtn.style.display = "inline-block";
+    };
+
+    saveBtn.onclick = async () => {
+      saveBtn.disabled = true;
+      saveBtn.innerText = "Saving...";
+
+      try {
+        const formData = new FormData();
+        formData.append("username", usernameInput.value);
+        formData.append("email", emailInput.value);
+        if (imageInput.files[0]) {
+          formData.append("profileImage", imageInput.files[0]);
+        }
+
+        const res = await fetch("http://localhost:5000/api/auth/profile", {
+          method: "PUT",
+          headers: { Authorization: localStorage.getItem("token") },
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          saveBtn.disabled = false;
+          saveBtn.innerText = "Save Changes";
+          alert(data.message || "Error updating profile");
+          return;
+        }
+
+        localStorage.setItem("username", data.user.username);
+        alert("Profile updated successfully!");
+        showProfile();
+      } catch (err) {
+        console.error(err);
+        saveBtn.disabled = false;
+        saveBtn.innerText = "Save Changes";
+        alert("Could not update profile.");
+      }
+    };
+  } catch (error) {
+    console.error("Profile load error:", error);
+  }
+}
 
 
 
@@ -467,6 +594,8 @@ document.getElementById("notificationsBtn")
 
 document.getElementById("messagesBtn")
 .onclick=showMessages;
+
+document.getElementById("profileBtn").onclick = showProfile;
 
 
 document.getElementById("logoutBtn")

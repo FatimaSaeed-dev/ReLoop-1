@@ -15,23 +15,19 @@
 
 <body>
 
-
 <script>
+  (function () {
+    const token = localStorage.getItem("token");
+    let role = localStorage.getItem("role");
+    if (!role && localStorage.getItem("user")) {
+      try { role = JSON.parse(localStorage.getItem("user")).role; } catch (e) {}
+    }
 
-const token = localStorage.getItem("token");
-const role = localStorage.getItem("role");
-
-
-if(!token){
-    window.location.href="login.html";
-}
-
-
-if(role !== "user" && role !== "recycler"){
-    window.location.href="login.html";
-}
-
-
+    // If not logged in or NOT a recycler, redirect away
+    if (!token || role !== "recycler") {
+      window.location.href = "signup.html";
+    }
+  })();
 </script>
 
 

@@ -1,94 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>ReLoop — Turn Waste Into Opportunity</title>
-<link rel="stylesheet" href="styles.css" />
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ReLoop | Turn Waste Into Opportunity</title>
+  
+  <!-- Fonts: Fredoka & Caveat for aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
 <nav>
-  <div class="logo">♻ ReLoop</div>
-  <div>
-    <a href="index.html">Home</a>
+  <div class="logo">
+    <span class="logo-icon">♻</span> ReLoop
+  </div>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
     <a href="login.html">Login</a>
     <a href="contact.html">Contact</a>
-    <a href="#" onclick="openDashboard()">Dashboard</a>
+    <a href="#" onclick="openDashboard(event)">Dashboard</a>
     <a href="about.html">About</a>
-    <a href="marketplace.html">Marketplace</a>
+    <a href="marketplace.html" class="nav-cta">Marketplace</a>
   </div>
 </nav>
 
 <div class="container2">
-<img class="tree left float" src="tree.png">
-<img class="tree right float" src="tree.png">
-<img class="recycle" src="recycle.png" class="overlap-image"> 
-<section class="hero">
-  <div class="badge"> A New Life for Every Material</div>
+  <!-- Recycle Logo background image -->
+  <img class="recycle overlap-image" src="recycle.png" alt="Recycle logo background"> 
 
-  <h1>
-    Waste doesn’t end.<br/>
-    It <span class="hero-text">ReLoops.</span>
-  </h1>
+  <section class="hero">
+    <div class="badge">🌱 A New Life for Every Material</div>
 
-  <p>
-    ReLoop connects businesses with surplus materials to those who need them
-    creating a living cycle of reuse, savings, and sustainability.
-  </p>
+    <h1>
+      Waste doesn’t end.<br/>
+      It <span class="hero-text">ReLoops.<span class="crayon-underline"></span></span>
+    </h1>
 
-  <a href="marketplace.html" class="cta">Enter Marketplace</a>
+    <p>
+      ReLoop connects businesses with surplus materials to those who need them — 
+      creating a living cycle of reuse, savings, and sustainability.
+    </p>
 
-  <div class="stats">
-    <div class="card">
-      <h2 id="biz">0</h2>
-      <p>Businesses Joined</p>
+    <div class="cta-wrapper">
+      <a href="marketplace.html" class="cta">
+        <span>Enter Marketplace</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
 
-    <div class="card">
-      <h2 id="kg">0</h2>
-      <p>Kg Waste Saved</p>
+    <!-- Stats Section with Trees Framing Cards -->
+    <div class="stats-wrapper">
+      <img class="tree left float" src="tree.png" alt="Tree decoration left">
+
+      <div class="stats">
+        <div class="card paper-card">
+          <div class="pin"></div>
+          <h2 id="biz">0</h2>
+          <p>Businesses Joined</p>
+        </div>
+
+        <div class="card paper-card">
+          <div class="pin"></div>
+          <h2 id="kg">0</h2>
+          <p>Kg Waste Saved</p>
+        </div>
+
+        <div class="card paper-card">
+          <div class="pin"></div>
+          <h2 id="items">0</h2>
+          <p>Materials ReLooped</p>
+        </div>
+      </div>
+
+      <img class="tree right float" src="tree.png" alt="Tree decoration right">
+    </div>
+  </section>
+
+  <!-- Section with Features -->
+  <section class="section">
+    <div class="torn-edge-top"></div>
+    <div class="section-header">
+      <h2>Why ReLoop Feels Different?</h2>
+      <p>We don’t sell waste. We reimagine it into opportunity.</p>
     </div>
 
-    <div class="card">
-      <h2 id="items">0</h2>
-      <p>Materials ReLooped</p>
-    </div>
-  </div>
-</section>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </div>
+        <h3>Circular Economy Network</h3>
+        <p>Connect instantly with local supply chains seeking raw salvaged materials.</p>
+      </div>
 
-<section class="section">
-  <h2>Why ReLoop Feels Different?</h2>
-  <p>
-    We don’t sell waste. We reimagine it into opportunity.
-  </p>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Cost Saving for Businesses</h3>
+        <p>Reduce disposal fees while turning surplus inventory into extra revenue.</p>
+      </div>
 
-  <div class="features">
-    <div class="feature">
-       Circular Economy Network
-    </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Real Environmental Impact</h3>
+        <p>Track carbon offset & diversion metrics in real-time on your dashboard.</p>
+      </div>
 
-    <div class="feature">
-       Cost Saving for Businesses
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>Smart Flow Matching</h3>
+        <p>AI-assisted suggestions pair surplus material with compatible manufacturers.</p>
+      </div>
     </div>
-
-    <div class="feature">
-       Real Environmental Impact
-    </div>
-
-    <div class="feature">
-       Smart Flow Matching System
-    </div>
-  </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <footer>
-  © 2026 ReLoop — A cycle that never ends.
+  <div class="footer-content">
+    <div class="footer-stamp">100% RECYCLABLE INITIATIVE</div>
+    <p>© 2026 ReLoop — A cycle that never ends.</p>
+  </div>
 </footer>
 
+<!-- Main logic script -->
+<script src="script.js"></script>
 </body>
 </html>

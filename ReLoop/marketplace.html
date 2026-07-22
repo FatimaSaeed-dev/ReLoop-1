@@ -4,187 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace | ReLoop</title>
-
     <link rel="stylesheet" href="marketplace.css">
 </head>
-
 <body>
 
 <!-- ================= NAVIGATION ================= -->
-
 <nav>
-
-    <div class="logo">
-        ♻ ReLoop
-    </div>
-
-    <ul class="nav-links">
-
-        <li><a href="index.html">Home</a></li>
-
-        <li><a class="active" href="marketplace.html">Marketplace</a></li>
-
-<li><a href="#" onclick="openDashboard()">Dashboard</a></li>
-
-        <li><a href="login.html">Login</a></li>
-
-    </ul>
-
+  <div class="logo">
+    <span class="logo-icon">♻</span> ReLoop
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+    <a href="contact.html">Contact</a>
+    <a href="#" onclick="openDashboard(event)">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="marketplace.html" class="nav-cta active">Marketplace</a>
+  </div>
 </nav>
 
 <!-- ================= HERO ================= -->
-
 <header class="marketplace-header">
-
     <h1>Marketplace</h1>
-
     <p>
-        Browse reusable materials shared by businesses.
-        View listings freely and sign in when you're ready to request materials.
+        Browse reusable materials shared by local businesses. 
+        View listings freely and sign in when you're ready to make requests.
     </p>
+    <span class="crayon-note">~ Connect, reuse, and reduce waste ~</span>
 
     <div class="search-container">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search materials...">
-
+        <input type="text" id="searchInput" placeholder="Search materials (e.g. Oak Wood, Pallets, Scrap Glass)...">
     </div>
-
 </header>
 
 <!-- ================= MAIN ================= -->
-
 <main class="marketplace-layout">
 
-    <!-- FILTERS -->
-
+    <!-- FILTERS SIDEBAR -->
     <aside class="filters">
-
+        <div class="card-pin">📌</div>
         <h2>Filters</h2>
 
         <div class="filter-group">
-
-            <label>Category</label>
-
-            <select>
-
+            <label for="categoryFilter">Category</label>
+            <select id="categoryFilter">
                 <option>All Categories</option>
-
                 <option>Wood</option>
-
                 <option>Plastic</option>
-
                 <option>Metal</option>
-
                 <option>Glass</option>
-
                 <option>Fabric</option>
-
                 <option>Paper</option>
-
             </select>
-
         </div>
 
         <div class="filter-group">
-
-            <label>Location</label>
-
-            <select>
-
+            <label for="locationFilter">Location</label>
+            <select id="locationFilter">
                 <option>All Cities</option>
-
                 <option>Karachi</option>
-
                 <option>Lahore</option>
-
                 <option>Islamabad</option>
-
                 <option>Faisalabad</option>
-
                 <option>Multan</option>
-
             </select>
-
         </div>
 
         <div class="filter-group">
-
-            <label>Availability</label>
-
-            <select>
-
+            <label for="quantityFilter">Quantity</label>
+            <select id="quantityFilter">
                 <option>Any Quantity</option>
-
                 <option>Below 50 kg</option>
-
                 <option>50–100 kg</option>
-
                 <option>100+ kg</option>
-
             </select>
-
         </div>
 
+        <div class="filter-group">
+            <label for="conditionFilter">Condition</label>
+            <select id="conditionFilter">
+                <option>Any Condition</option>
+                <option>Raw Surplus</option>
+                <option>Clean / Processed</option>
+                <option>Recycled Grade</option>
+            </select>
+        </div>
+
+        <button class="reset-btn" onclick="location.reload()">Reset Filters</button>
     </aside>
 
-    <!-- PRODUCTS -->
-
-<section class="products" id="productsContainer">
-
-    <p>Loading materials...</p>
-
-</section>
+    <!-- PRODUCTS CONTAINER -->
+    <section class="products" id="productsContainer">
+        <p>Loading materials...</p>
+    </section>
 
 </main>
 
 <!-- LOGIN POPUP -->
-
 <div class="popup" id="loginPopup">
-
     <div class="popup-content">
-
+        <div class="card-pin">📌</div>
         <h2>Sign In Required</h2>
-
         <p>
-
             You can browse all materials without an account.
-
             To request materials, please sign in first.
-
         </p>
-
         <a href="login.html">
-            <button class="login-btn">
-                Login
-            </button>
+            <button class="login-btn">Login</button>
         </a>
-
-        <button class="close-btn">
-
-            Maybe Later
-
-        </button>
-
+        <button class="close-btn" id="closePopup">Maybe Later</button>
     </div>
-
 </div>
 
 <!-- FOOTER -->
-
 <footer>
-
-    <p>
-
-        © 2026 ReLoop | Connecting Businesses Through Sustainable Resource Sharing
-
-    </p>
-
+    <p>© 2026 ReLoop | Connecting Businesses Through Sustainable Resource Sharing</p>
 </footer>
 
 <script src="marketplace.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>

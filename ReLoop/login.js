@@ -23,34 +23,32 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         if (response.ok) {
             console.log("LOGIN SUCCESS", data);
 
-    // Save login information
-localStorage.setItem("token", data.token);
-localStorage.setItem("username", data.user.username);
-localStorage.setItem("email", data.user.email);
-localStorage.setItem("role", data.user.role);
-localStorage.setItem("userId", data.user.id);
-    alert("Login successful!");
+            // Save login information
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("username", data.user.username);
+            localStorage.setItem("email", data.user.email);
+            localStorage.setItem("role", data.user.role);
+            localStorage.setItem("userId", data.user.id || data.user._id);
 
-    // Redirect based on role
-    
-    alert("Login successful!");
+            alert("Login successful!");
 
-console.log("ROLE:", data.user.role);
-    
-if (data.user.role === "business") {
+            // Check if user was attempting to request a product before logging in
+            const redirectUrl = localStorage.getItem("redirectAfterLogin");
 
-    window.location.href = "business-dashboard.html";
+            if (redirectUrl) {
+                localStorage.removeItem("redirectAfterLogin");
+                window.location.href = redirectUrl; // Returns straight to product.html!
+            } else if (data.user.role === "business") {
+                window.location.href = "business-dashboard.html";
+            } else if (data.user.role === "recycler") {
+                window.location.href = "recycler-dashboard.html";
+            } else {
+                window.location.href = "index.html";
+            }
 
-} else if (data.user.role === "recycler") {
-
-    window.location.href = "recycler-dashboard.html";
-
-}
-
-} else {
-
-    alert(data.message || "Login failed.");
-}
+        } else {
+            alert(data.message || "Login failed.");
+        }
     } catch (error) {
         console.error(error);
         alert("Cannot connect to the server.");
