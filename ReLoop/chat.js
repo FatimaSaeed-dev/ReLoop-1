@@ -2,8 +2,14 @@ const chatId = localStorage.getItem("chatId");
 const userId = localStorage.getItem("userId");
 
 if (!chatId) {
-    alert("No chat selected");
-    window.location.href = "recycler-dashboard.html";
+    Swal.fire({
+        icon: 'error',
+        title: 'No Chat Selected',
+        text: 'Redirecting back to dashboard...',
+        confirmButtonColor: '#2E7D32'
+    }).then(() => {
+        window.location.href = "recycler-dashboard.html";
+    });
 }
 
 // ==========================
@@ -11,19 +17,14 @@ if (!chatId) {
 // ==========================
 async function loadMessages() {
     try {
-        const response = await fetch(
-            `http://localhost:5000/api/messages/${chatId}`
-        );
-
+        const response = await fetch(`http://localhost:5000/api/messages/${chatId}`);
         const messages = await response.json();
 
         if (!response.ok) {
-            console.log("Server error:", messages);
             throw new Error(messages.message || "Failed loading messages");
         }
 
         if (!Array.isArray(messages)) {
-            console.log("Invalid messages:", messages);
             throw new Error("Messages are not an array");
         }
 
@@ -51,15 +52,12 @@ async function loadMessages() {
             `;
         });
 
-        // Auto scroll to bottom
         container.scrollTop = container.scrollHeight;
 
     } catch (error) {
         console.log("Loading messages failed:", error);
         document.getElementById("messages").innerHTML = `
-            <p class="empty-state">
-                Could not load messages.
-            </p>
+            <p class="empty-state">Could not load messages.</p>
         `;
     }
 }
@@ -74,25 +72,27 @@ async function sendMessage() {
     if (!text) return;
 
     try {
-        const response = await fetch(
-            "http://localhost:5000/api/messages",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    chat: chatId,
-                    sender: userId,
-                    text: text
-                })
-            }
-        );
+        const response = await fetch("http://localhost:5000/api/messages", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                chat: chatId,
+                sender: userId,
+                text: text
+            })
+        });
 
         const data = await response.json();
 
         if (!response.ok) {
-            alert(data.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message || 'Failed to send message',
+                confirmButtonColor: '#2E7D32'
+            });
             return;
         }
 
@@ -101,18 +101,25 @@ async function sendMessage() {
 
     } catch (error) {
         console.log("Sending message failed:", error);
-        alert("Message could not be sent");
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Message could not be sent',
+            confirmButtonColor: '#2E7D32'
+        });
     }
 }
 
 // ==========================
 // EVENT LISTENERS & INIT
 // ==========================
-document.getElementById("messageInput").addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-        sendMessage();
-    }
-});
+const messageInput = document.getElementById("messageInput");
+if (messageInput) {
+    messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            sendMessage();
+        }
+    });
+}
 
-// Load messages when page opens
 loadMessages();

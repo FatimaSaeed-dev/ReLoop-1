@@ -47,7 +47,7 @@ a {
 }
 
 /* ===================================================
-   NAVIGATION
+   NAVIGATION (MATCHES INDEX & MARKETPLACE)
 =================================================== */
 nav {
     width: 100%;
@@ -136,6 +136,20 @@ nav::after {
     text-align: center;
     padding: 70px 8% 60px;
     flex: 1;
+}
+
+.badge {
+    display: inline-block;
+    padding: 8px 22px;
+    border-radius: 30px;
+    background: #e1f2e3;
+    color: var(--dark-green);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 20px;
+    border: 2px dashed #a3d9a5;
+    box-shadow: 2px 4px 10px rgba(0,0,0,0.03);
+    transform: rotate(-1deg);
 }
 
 .about-section h1 {

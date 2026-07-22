@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account | ReLoop</title>
+    <title>Sign Up | ReLoop</title>
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Custom Auth Stylesheet -->
     <link rel="stylesheet" href="auth.css">
 </head>
 <body>
@@ -15,76 +20,58 @@
     <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="marketplace.html">Marketplace</a></li>
-        <li><a href="login.html">Login</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="about.html">About</a></li>
     </ul>
 </nav>
 
-<section class="auth-container">
+<div class="auth-container">
     <div class="auth-card">
         <div class="card-pin">📌</div>
         <h1>Create Account</h1>
-        <p class="subtitle">Join ReLoop and start giving reusable materials a second life.</p>
-        
-        <span class="crayon-highlight">~ Start making an impact today! ~</span>
+        <p class="subtitle">Join the ReLoop network today</p>
+        <span class="crayon-highlight">Start recycling smarter!</span>
 
         <form id="signupForm">
             <div class="input-group">
-                <label for="fullname">Full Name</label>
-                <input type="text" id="fullname" placeholder="Enter your full name" required>
+                <label>Username</label>
+                <input type="text" id="fullname" placeholder="Choose a username" required>
             </div>
 
             <div class="input-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
-            </div>
-
-            <div class="input-group">
-                <label for="company">Company Name (Optional)</label>
-                <input type="text" id="company" placeholder="Your company name">
-            </div>
-
-            <div class="input-group">
-                <label for="role">Account Type</label>
-                <select id="role">
-                    <option value="business">Business</option>
+                <label>Role</label>
+                <select id="role" required>
                     <option value="recycler">Recycler</option>
+                    <option value="business">Business</option>
                 </select>
             </div>
 
             <div class="input-group">
-                <label for="password">Password</label>
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
                 <input type="password" id="password" placeholder="Create a password" required>
             </div>
 
             <div class="input-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+                <label>Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
             </div>
 
-            <div class="terms">
-                <label>
-                    <input type="checkbox" required>
-                    I agree to the Terms & Conditions
-                </label>
-            </div>
-
-            <button type="submit" class="auth-btn">Create Account</button>
+            <button type="submit" class="auth-btn">Sign Up</button>
         </form>
-
-        <div class="divider">
-            <span>OR</span>
-        </div>
-
-        <button class="google-btn">Continue with Google</button>
 
         <p class="bottom-text">
             Already have an account? <a href="login.html">Login</a>
         </p>
     </div>
-</section>
+</div>
 
 <footer>
-    <p>© 2026 ReLoop | Sustainable Resource Sharing</p>
+    <p>© 2026 ReLoop — A cycle that never ends.</p>
 </footer>
 
 <script src="signup.js"></script>

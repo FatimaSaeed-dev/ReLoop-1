@@ -1,284 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Product Details | ReLoop</title>
-
-<link rel="stylesheet" href="product.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | ReLoop</title>
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link rel="stylesheet" href="product.css">
 </head>
-
 <body>
 
 <!-- ================= NAVIGATION ================= -->
-
 <nav>
-
-<div class="logo">
-
-♻ ReLoop
-
-</div>
-
-<ul class="nav-links">
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="marketplace.html">Marketplace</a></li>
-
-<li><a href="#" onclick="openDashboard()">Dashboard</a></li>
-
-<li><a href="login.html">Login</a></li>
-
-</ul>
-
+    <div class="logo">
+        ♻ ReLoop
+    </div>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="#" onclick="openDashboard(event)">Dashboard</a></li>
+        <li><a href="login.html">Login</a></li>
+    </ul>
 </nav>
 
 <!-- ================= PRODUCT ================= -->
-
 <main class="product-page">
-
-<div class="product-gallery">
-
-
-    <img 
-    id="mainImage"
-    class="main-image"
-    src="images/default.jpg"
-    alt="Product Image">
-
-
-    <div id="thumbnailContainer" class="thumbnails">
-
+    <div class="product-gallery">
+        <img id="mainImage" class="main-image" src="images/default.jpg" alt="Product Image">
+        <div id="thumbnailContainer" class="thumbnails"></div>
     </div>
 
+    <div class="product-info">
+        <h1>Wood Scrap</h1>
+        <p class="company">Eco Furniture Ltd.</p>
 
-</div>
+        <div class="details">
+            <p><strong>Category:</strong> Wood</p>
+            <p><strong>Available:</strong> 50 kg</p>
+            <p><strong>Location:</strong> Karachi</p>
+            <p><strong>Condition:</strong> Good</p>
+        </div>
 
-<div class="product-info">
+        <h3>Description</h3>
+        <p>High-quality wood offcuts generated during furniture manufacturing.</p>
 
-<h1>Wood Scrap</h1>
-
-<p class="company">
-
-Eco Furniture Ltd.
-
-</p>
-
-<div class="details">
-
-<p><strong>Category:</strong> Wood</p>
-
-<p><strong>Available:</strong> 50 kg</p>
-
-<p><strong>Location:</strong> Karachi</p>
-
-<p><strong>Condition:</strong> Good</p>
-
-<p><strong>Listed:</strong> 2 days ago</p>
-
-</div>
-
-<h3>Description</h3>
-
-<p>
-
-High-quality wood offcuts generated during furniture manufacturing.
-
-Suitable for furniture makers, artists, DIY projects, schools and recycling businesses.
-
-</p>
-
-<button 
-id="requestMaterialBtn"
-class="request-btn">
-
-    Request Material
-
-</button>
-
-</div>
-
+        <button id="requestMaterialBtn" class="request-btn">
+            Request Material
+        </button>
+    </div>
 </main>
 
 <!-- ================= SIMILAR PRODUCTS ================= -->
-
 <section class="related">
-
-<h2>You may also like</h2>
-
-<div class="products">
-
-<div class="product-card">
-
-<img src="images/cardboard.jpg">
-
-<h3>Cardboard Boxes</h3>
-
-<p class="business">
-
-QuickShip Logistics
-
-</p>
-
-<p>300 Pieces</p>
-
-</div>
-
-<div class="product-card">
-
-<img src="images/paper.jpg">
-
-<h3>Paper Waste</h3>
-
-<p class="business">
-
-PrintPro
-
-</p>
-
-<p>90 kg</p>
-
-</div>
-
-<div class="product-card">
-
-<img src="images/metal.jpg">
-
-<h3>Metal Sheets</h3>
-
-<p class="business">
-
-Steel Works
-
-</p>
-
-<p>75 Sheets</p>
-
-</div>
-
-</div>
-
+    <h2>You may also like</h2>
+    <div class="products">
+        <!-- Dynamically filled via product.js -->
+    </div>
 </section>
 
 <!-- ================= LOGIN POPUP ================= -->
-
 <div class="popup" id="loginPopup">
-
-<div class="popup-content">
-
-<h2>
-
-Sign In Required
-
-</h2>
-
-<p>
-
-Please login to request this material.
-
-</p>
-
-<a href="login.html">
-
-<button class="login-btn">
-
-Login
-
-</button>
-
-</a>
-
-<button class="close-btn">
-
-Maybe Later
-
-</button>
-
+    <div class="popup-content">
+        <h2>Sign In Required</h2>
+        <p>Please login to request this material.</p>
+        <a href="login.html">
+            <button class="login-btn">Login</button>
+        </a>
+        <button class="close-btn">Maybe Later</button>
+    </div>
 </div>
 
-</div>
-
+<!-- ================= REQUEST POPUP ================= -->
 <div class="popup" id="requestPopup">
+    <div class="popup-content">
+        <h2>Request Material</h2>
+        
+        <label>Quantity Needed (kg)</label>
+        <input id="requestQuantity" type="number" placeholder="Example: 50">
 
+        <label>Delivery Location</label>
+        <input id="requestLocation" type="text" placeholder="Karachi">
 
-<div class="popup-content">
+        <label>Message</label>
+        <textarea id="requestMessage" placeholder="Tell the business what you need"></textarea>
 
-
-<h2>
-Request Material
-</h2>
-
-
-<label>
-Quantity Needed (kg)
-</label>
-
-<input 
-id="requestQuantity"
-type="number"
-placeholder="Example: 50">
-
-
-<label>
-Delivery Location
-</label>
-
-<input
-id="requestLocation"
-type="text"
-placeholder="Karachi">
-
-
-<label>
-Message
-</label>
-
-<textarea
-id="requestMessage"
-placeholder="Tell the business what you need">
-</textarea>
-
-
-<button 
-id="sendRequestBtn"
-class="request-btn">
-
-Send Request
-
-</button>
-
-
-<button 
-id="closeRequestBtn"
-class="close-btn">
-
-Cancel
-
-</button>
-
-
-</div>
-
+        <button id="sendRequestBtn" class="request-btn">Send Request</button>
+        <button id="closeRequestBtn" class="close-btn">Cancel</button>
+    </div>
 </div>
 
 <footer>
-
-<p>
-
-© 2026 ReLoop
-
-</p>
-
+    <p>© 2026 ReLoop</p>
 </footer>
 
 <script src="product.js"></script>
-
 </body>
-
 </html>

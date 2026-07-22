@@ -7,16 +7,11 @@ async function loadProduct() {
     if (!productId) return;
 
     try {
-        const response = await fetch(
-            `http://localhost:5000/api/materials/${productId}`
-        );
-
+        const response = await fetch(`http://localhost:5000/api/materials/${productId}`);
         const material = await response.json();
         currentMaterial = material;
 
-        console.log("Current Material:", material);
-
-        // Main & Thumbnail Images
+        // Images
         const mainImage = document.getElementById("mainImage");
         const thumbnailContainer = document.getElementById("thumbnailContainer");
 
@@ -37,15 +32,13 @@ async function loadProduct() {
             });
         }
 
-        // Title Name
+        // Info Elements
         const nameHeading = document.querySelector(".product-info h1");
         if (nameHeading) nameHeading.innerText = material.name;
 
-        // Business Name
         const companyPara = document.querySelector(".company");
         if (companyPara) companyPara.innerText = material.owner?.username || "Business";
 
-        // Key Details
         const detailsDiv = document.querySelector(".details");
         if (detailsDiv) {
             detailsDiv.innerHTML = `
@@ -56,13 +49,11 @@ async function loadProduct() {
             `;
         }
 
-        // Description
         const descPara = document.querySelector(".product-info h3 + p");
         if (descPara) {
             descPara.innerText = material.description || "No description available";
         }
 
-        // Load Real Recommendations
         loadRelatedMaterials(material.category, material._id);
 
     } catch (error) {
@@ -70,7 +61,6 @@ async function loadProduct() {
     }
 }
 
-// Fetch Real Recommendations from MongoDB
 async function loadRelatedMaterials(category, currentId) {
     const productsContainer = document.querySelector(".related .products");
     if (!productsContainer) return;
@@ -79,26 +69,19 @@ async function loadRelatedMaterials(category, currentId) {
         const response = await fetch("http://localhost:5000/api/materials");
         const allMaterials = await response.json();
 
-        // Filter out the product currently being viewed
         let related = allMaterials.filter(item => item._id !== currentId);
-
-        // Optional: Prioritize items in the same category if available
         if (category) {
             const sameCategory = related.filter(item => item.category === category);
-            if (sameCategory.length > 0) {
-                related = sameCategory;
-            }
+            if (sameCategory.length > 0) related = sameCategory;
         }
 
-        // Limit to 3 items
         const itemsToDisplay = related.slice(0, 3);
 
         if (itemsToDisplay.length === 0) {
-            productsContainer.innerHTML = "<p style='color: #6b7280;'>No related materials found at the moment.</p>";
+            productsContainer.innerHTML = "<p style='color: #6b7280;'>No related materials found.</p>";
             return;
         }
 
-        // Render Real Product Cards
         productsContainer.innerHTML = itemsToDisplay.map(item => `
             <div class="product-card" onclick="window.location.href='product.html?id=${item._id}'">
                 <img src="${item.images?.[0] || 'images/default.jpg'}" alt="${item.name}">
@@ -110,13 +93,12 @@ async function loadRelatedMaterials(category, currentId) {
 
     } catch (error) {
         console.error("Error fetching related materials:", error);
-        productsContainer.innerHTML = "<p style='color: #6b7280;'>Unable to load recommendations.</p>";
     }
 }
 
 loadProduct();
 
-// Open Request Modal (Or Login Modal if not logged in)
+// Modals Handling
 const requestMaterialBtn = document.getElementById("requestMaterialBtn");
 const loginPopup = document.getElementById("loginPopup");
 const requestPopup = document.getElementById("requestPopup");
@@ -124,7 +106,6 @@ const requestPopup = document.getElementById("requestPopup");
 if (requestMaterialBtn) {
     requestMaterialBtn.addEventListener("click", () => {
         const userId = localStorage.getItem("userId");
-
         if (!userId) {
             localStorage.setItem("redirectAfterLogin", window.location.href);
             if (loginPopup) loginPopup.style.display = "flex";
@@ -134,23 +115,13 @@ if (requestMaterialBtn) {
     });
 }
 
-// Close Modals
-const closeRequestBtn = document.getElementById("closeRequestBtn");
-if (closeRequestBtn) {
-    closeRequestBtn.addEventListener("click", () => {
-        if (requestPopup) requestPopup.style.display = "none";
-    });
-}
-
-const closeBtns = document.querySelectorAll(".close-btn");
-closeBtns.forEach(btn => {
+document.querySelectorAll(".close-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         if (loginPopup) loginPopup.style.display = "none";
         if (requestPopup) requestPopup.style.display = "none";
     });
 });
 
-// Submit Request
 const sendRequestBtn = document.getElementById("sendRequestBtn");
 if (sendRequestBtn) {
     sendRequestBtn.addEventListener("click", async () => {
@@ -169,42 +140,58 @@ if (sendRequestBtn) {
         const message = document.getElementById("requestMessage")?.value;
 
         if (!quantity || !location) {
-            alert("Please provide both quantity and location.");
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Details',
+                text: 'Please provide both quantity and location.',
+                confirmButtonColor: '#2E7D32'
+            });
             return;
         }
 
-        const requestData = {
-            user: userId,
-            business: currentMaterial?.owner?._id || currentMaterial?.owner,
-            material: currentMaterial?._id,
-            quantity: quantity,
-            location: location,
-            message: message
-        };
-
         try {
-            const headers = { "Content-Type": "application/json" };
-            if (token) {
-                headers["Authorization"] = `Bearer ${token}`;
-            }
-
             const response = await fetch("http://localhost:5000/api/request", {
                 method: "POST",
-                headers: headers,
-                body: JSON.stringify(requestData)
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    user: userId,
+                    business: currentMaterial?.owner?._id || currentMaterial?.owner,
+                    material: currentMaterial?._id,
+                    quantity,
+                    location,
+                    message
+                })
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                alert("Request sent successfully!");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Request sent successfully!',
+                    confirmButtonColor: '#1B5E20'
+                });
                 if (requestPopup) requestPopup.style.display = "none";
             } else {
-                alert(data.message || "Failed to send request.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.message || 'Failed to send request.',
+                    confirmButtonColor: '#2E7D32'
+                });
             }
         } catch (error) {
             console.log(error);
-            alert("Server error. Could not send request.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Could not send request.',
+                confirmButtonColor: '#2E7D32'
+            });
         }
     });
 }

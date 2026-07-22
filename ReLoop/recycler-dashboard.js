@@ -136,220 +136,173 @@ console.log(error);
 
 
 
-async function showRequests(){
+async function showRequests() {
 
+    document.getElementById("content").innerHTML = `
+        <h1>My Requests</h1>
+        <div id="requestsContainer">Loading...</div>
+    `;
 
-document.getElementById("content").innerHTML = `
+    const userId = localStorage.getItem("userId");
 
-<h1>
-My Requests
-</h1>
+    try {
 
-<div id="requestsContainer">
-Loading...
-</div>
+        const response = await fetch(
+            `http://localhost:5000/api/request/user/${userId}`
+        );
 
-`;
+        const requests = await response.json();
 
+        const container = document.getElementById("requestsContainer");
 
+        container.innerHTML = "";
 
-const userId = localStorage.getItem("userId");
+        if (!requests.length) {
+            container.innerHTML = `
+                <p>No requests yet.</p>
+            `;
+            return;
+        }
 
+        requests.forEach(request => {
 
-try{
+            const materialName =
+                request.material?.name || "Material Deleted";
 
+            const businessName =
+                request.business?.username || "Business Deleted";
 
-const response = await fetch(
+            const chatButton =
+                request.chat
+                    ? `
+                    <button onclick="openChat('${request.chat._id}')">
+                        Message Business 💬
+                    </button>
+                    `
+                    : "";
 
-`http://localhost:5000/api/request/user/${userId}`
+            container.innerHTML += `
+                <div class="card">
 
-);
+                    <h2>${materialName}</h2>
 
+                    <p>
+                        Business:
+                        ${businessName}
+                    </p>
 
+                    <p>
+                        Quantity:
+                        ${request.quantity} kg
+                    </p>
 
-const requests = await response.json();
-
-
-
-const container =
-document.getElementById("requestsContainer");
-
-
-
-container.innerHTML="";
-
-
-
-if(requests.length===0){
-
-container.innerHTML = `
-
-<p>
-No requests yet.
-</p>
-
-`;
-
-return;
-
-}
-
-
-
-requests.forEach(request=>{
-
-
-container.innerHTML += `
-
-
-<div class="card">
-
-
-<h2>
-${request.material.name}
-</h2>
-
-
-<p>
-Business:
-${request.business.username}
-</p>
-
-
-<p>
-Quantity:
-${request.quantity} kg
-</p>
-
-
-<p>
-Status:
-${request.status}
-</p>
-
-
-
-${
-request.chat
+                    <p>
+                        Status:
+                        ${request.status}
+                    </p>
+                    ${
+request.status === "accepted" &&
+!request.userConfirmed
 ?
 `
-<button onclick="openChat('${request.chat._id}')">
-Message Business 💬
+<button onclick="confirmRequest('${request._id}')">
+Confirm Transaction ✅
 </button>
 `
 :
 ""
 }
 
+                    ${chatButton}
 
+                </div>
+            `;
 
-</div>
+        });
 
+    }
+    catch (error) {
 
-`;
+        console.log(error);
 
+        document.getElementById("requestsContainer").innerHTML = `
+            <p>Could not load requests.</p>
+        `;
 
-
-});
-
-
-}
-
-catch(error){
-
-console.log(error);
-
-
-document.getElementById("requestsContainer").innerHTML = `
-
-<p>
-Could not load requests.
-</p>
-
-`;
+    }
 
 }
 
+async function showRequestsOnDashboard() {
 
+    const userId = localStorage.getItem("userId");
 
-}
+    try {
 
-async function showRequestsOnDashboard(){
+        const response = await fetch(
+            `http://localhost:5000/api/request/user/${userId}`
+        );
 
-const userId = localStorage.getItem("userId");
+        const requests = await response.json();
 
-try{
+        const container =
+            document.getElementById("requestsContainer");
 
-const response = await fetch(
+        if (!container) return;
 
-`http://localhost:5000/api/request/user/${userId}`
+        container.innerHTML = "";
 
-);
+        if (!requests.length) {
 
-const requests = await response.json();
+            container.innerHTML = `
+                <p>No requests yet.</p>
+            `;
 
-const container =
-document.getElementById("requestsContainer");
+            return;
 
-if(!container) return;
+        }
 
-container.innerHTML = "";
+        requests.forEach(request => {
 
-if(requests.length===0){
+            const highlight =
+                localStorage.getItem("highlightRequest") === request._id;
 
-container.innerHTML = `
+            const materialName =
+                request.material?.name || "Material Deleted";
 
-<p>
-No requests yet.
-</p>
+            const businessName =
+                request.business?.username || "Business Deleted";
 
-`;
+            container.innerHTML += `
+                <div class="card ${highlight ? "highlight-card" : ""}">
 
-return;
+                    <h3>${materialName}</h3>
 
-}
+                    <p>
+                        Business:
+                        ${businessName}
+                    </p>
 
-requests.forEach(request=>{
+                    <p>
+                        Status:
+                        ${request.status}
+                    </p>
 
-    const highlight =
-localStorage.getItem("highlightRequest") === request._id;
+                </div>
+            `;
 
-container.innerHTML += `
+        });
 
-<div class="card ${highlight ? "highlight-card" : ""}">
+        localStorage.removeItem("highlightRequest");
 
-<h3>
-${request.material.name}
-</h3>
+    }
+    catch (error) {
 
-<p>
-Business:
-${request.business.username}
-</p>
+        console.log(error);
 
-<p>
-Status:
-${request.status}
-</p>
-
-</div>
-
-`;
-
-});
-
-localStorage.removeItem(
-    "highlightRequest"
-);
+    }
 
 }
-catch(error){
-
-console.log(error);
-
-}
-}
-
 
 async function showNotifications(){
 
@@ -676,6 +629,9 @@ alert("Request confirmed!");
 
 showRequests();
 
+loadUserStats();
+
+showRequestsOnDashboard();
 
 }
 
@@ -871,5 +827,53 @@ function openNotification(requestId){
     );
 
     showRequests();
+
+}
+
+async function confirmRequest(requestId){
+
+    const confirmAction = confirm(
+        "Confirm that you have received the material?"
+    );
+
+    if(!confirmAction){
+        return;
+    }
+
+    try{
+
+        const response = await fetch(
+
+            `http://localhost:5000/api/request/${requestId}/user-confirm`,
+
+            {
+                method:"PUT"
+            }
+
+        );
+
+        const data = await response.json();
+
+        if(response.ok){
+
+            alert("Transaction confirmed!");
+
+            showRequests();
+
+        }
+        else{
+
+            alert(data.message);
+
+        }
+
+    }
+    catch(error){
+
+        console.log(error);
+
+        alert("Could not confirm transaction.");
+
+    }
 
 }

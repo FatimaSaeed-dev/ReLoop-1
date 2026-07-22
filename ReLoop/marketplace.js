@@ -14,18 +14,30 @@ async function loadMaterials() {
 
     } catch (error) {
         console.error("Error loading materials:", error);
-        productsContainer.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px;">
-                <h3 style="color: #991b1b; margin-bottom: 8px;">Unable to load materials</h3>
-                <p style="color: var(--muted);">Please ensure your backend server is running on port 5000.</p>
-            </div>
-        `;
+        
+        Swal.fire({
+            icon: 'error',
+            title: 'Connection Error',
+            text: 'Please ensure your backend server is running on port 5000.',
+            confirmButtonColor: '#2E7D32'
+        });
+
+        if (productsContainer) {
+            productsContainer.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px;">
+                    <h3 style="color: #991b1b; margin-bottom: 8px;">Unable to load materials</h3>
+                    <p style="color: var(--muted);">Please ensure your backend server is running on port 5000.</p>
+                </div>
+            `;
+        }
     }
 }
 
 // Render material cards with clean .product-info wrapper
 function renderMaterials(materials) {
     const productsContainer = document.querySelector(".products");
+    if (!productsContainer) return;
+    
     productsContainer.innerHTML = "";
 
     if (materials.length === 0) {
@@ -142,7 +154,18 @@ function openDashboard() {
         window.location.href = "dashboard.html";
     } else {
         const popup = document.getElementById("loginPopup");
-        if (popup) popup.style.display = "flex";
+        if (popup) {
+            popup.style.display = "flex";
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Login Required',
+                text: 'Please log in to view your dashboard.',
+                confirmButtonColor: '#2E7D32'
+            }).then(() => {
+                window.location.href = "login.html";
+            });
+        }
     }
 }
 

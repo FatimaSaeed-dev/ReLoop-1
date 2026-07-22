@@ -14,30 +14,43 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
     }
 
     try {
+
         const response = await fetch("http://localhost:5000/api/auth/register", {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 username,
                 email,
                 password,
                 role
             })
+
         });
 
         const data = await response.json();
 
         if (response.ok) {
+
             alert("Account created successfully!");
+
             window.location.href = "login.html";
+
         } else {
-            alert(data.message || "Registration failed.");
+
+            alert(data.message);
+
         }
 
     } catch (error) {
+
         console.error(error);
         alert("Cannot connect to the server.");
+
     }
+
 });
